@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+			<h:form id="frmUserListagem">
+					
+			<h:outputLabel value="Servidor: "></h:outputLabel>
+			<h:inputText id="servidorFilter" value="#{MBFerramentaLdap.servidorFilter}"></h:inputText>&nbsp;
+
+			<h:outputLabel value="IP: "></h:outputLabel>
+			<h:inputText id="ipFilter" value="#{MBFerramentaLdap.ipFilter}"></h:inputText>&nbsp;
+
+			<h:outputLabel value="Database/Aplicação: "></h:outputLabel>
+			<h:inputText id="databaseFilter" value="#{MBFerramentaLdap.databaseFilter}"></h:inputText>			
+		
+			<h:outputLabel value=" Programa: "></h:outputLabel>
+			<h:inputText id="programaFilter" value="#{MBFerramentaLdap.programaFilter}"></h:inputText>
+
+
+			<h:commandButton action="#{MBFerramentaLdap.carregarListagem()}" value="Pesquisar"></h:commandButton>	
+				
+			<p:dataTable id="tblUserListagem" widgetVar="tabelaUserListagem"
+				value="#{MBFerramentaLdap.itens}" var="item"
+				emptyMessage="Nenhum registro encontrado." paginator="true" rows="1000"
+				filteredValue="#{MBFerramentaLdap.itensfiltrados}">
+				<f:facet name="header">
+				<h:outputText value="Ferramenta - Listagem" />	
+					
+				</f:facet>
+
+
+						
+				<p:column headerText="Servidor"
+					filterBy="#{item.servidor}"
+					sortBy="#{item.servidor}">
+					<h:outputText value="#{item.servidor}" />
+				</p:column>
+				
+
+				<p:column headerText="IP"
+					filterBy="#{item.ip}"
+					sortBy="#{item.ip}">
+					<h:outputText value="#{item.ip}" />
+				</p:column>
+
+				
+				<p:column headerText="Database/Aplicação" sortBy="#{item.database}"
+					filterBy="#{item.database}">
+					<h:outputText value="#{item.database}" />
+				</p:column>
+
+		<p:column headerText="Tipo Ambiente"
+					filterBy="#{item.tipo_ambiente}"
+					sortBy="#{item.tipo_ambiente}">
+					<h:outputText value="#{item.tipo_ambiente}" />
+				</p:column>
+		
+				<p:column headerText="Programa"
+					filterBy="#{item.programa}"
+					sortBy="#{item.programa}">
+					<h:outputText value="#{item.programa}" />
+				</p:column>
+
+
+
+				<p:column headerText="Opções">
+				
+			
+					<p:commandButton icon="ui-icon-folder-open"
+						actionListener="#{MBFerramenta.prepararEditar(item.comando2)}"
+						update=":frmUserAbrir:pnlUserAbrir :msgGlobal">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBFerramenta.ferramenta}" />
+					</p:commandButton>
+					
+				</p:column>
+
+
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgUserNovo" closable="false" draggable="false"
+			resizable="false" modal="true" appendTo="@(body)"
+			header="FerramentaLdap- Novo">
+			<h:form id="frmUserNovo">
+				<h:panelGrid id="pnlUserNovo" columns="2">
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Gravar" actionListener="#{MBFerramentaLdap.novo}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserNovo', 'tabelaUserListagem'); " />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserNovo').hide();">
+						<p:resetInput target="pnlUserNovo" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserExcluir" closable="false"
+			draggable="false" resizable="false" header="FerramentaLdap- Excluir"
+			modal="true" appendTo="@(body) ">
+
+			<h:form id="frmUserExcluir">
+				<h:panelGrid id="pnlUserExcluir" columns="2">
+
+
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBFerramentaLdap.excluir}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="PF('dlgUserExcluir').hide(); tabelaUserListagem.clearFilters();" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserExcluir').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+
+				<p:dialog widgetVar="dlgUserAbrir" closable="false" draggable="false"
+			resizable="false" header="Ferramenta- Abrir " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserAbrir">
+				<h:panelGrid id="pnlUserAbrir" columns="2">
+					</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		
+		
+			</ui:define>
+
+</ui:composition>

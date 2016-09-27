@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<f:event listener="#{MBCmdb.carregarListagem}" type="preRenderView" />
+		<h:form id="frmUserListagem">
+			<p:dataTable id="tblUserListagem" widgetVar="tabelaUserListagem"
+				value="#{MBCmdb.itens}" var="item"
+				emptyMessage="Nenhum registro encontrado." paginator="true" rows="300"
+				filteredValue="#{MBCmdb.itensfiltrados}">
+				<f:facet name="header">
+					<h:outputText value="Cmdb- Listagem" />
+				</f:facet>
+
+				
+				<p:column headerText="Servidor" sortBy="#{item.servidor}"
+					filterBy="#{item.servidor}">
+					<h:outputText value="#{item.servidor}" />
+				</p:column>
+
+			<p:column headerText="database" sortBy="#{item.database}"
+					filterBy="#{item.database}">
+					<h:outputText value="#{item.database}" />
+				</p:column>
+
+				<p:column headerText="Versao Database" sortBy="#{item.versao_database}"
+					filterBy="#{item.versao_database}">
+					<h:outputText value="#{item.versao_database}" />
+				</p:column>
+
+				<p:column headerText="Tipo Ambiente" sortBy="#{item.tipo_ambiente}"
+					filterBy="#{item.tipo_ambiente}">
+					<h:outputText value="#{item.tipo_ambiente}" />
+				</p:column>
+
+				<p:column headerText="sgdb" sortBy="#{item.sgdb}"
+					filterBy="#{item.sgdb}">
+					<h:outputText value="#{item.sgdb}" />
+				</p:column>
+
+				<p:column headerText="referencia" sortBy="#{item.referencia}"
+					filterBy="#{item.referencia}">
+					<h:outputText value="#{item.referencia}" />
+				</p:column>
+
+
+				<p:column headerText="Ip" sortBy="#{item.ip}"
+					filterBy="#{item.ip}">
+					<h:outputText value="#{item.ip}" />
+				</p:column>
+
+
+				<p:column headerText="Versao SO" sortBy="#{item.versao_so}"
+					filterBy="#{item.versao_so}">
+					<h:outputText value="#{item.versao_so}" />
+				</p:column>
+
+
+
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgUserExcluir').show();"
+						update=":frmUserExcluir:pnlUserExcluir">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBCmdb.cmdb}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{MBCmdb.prepararEditar}"
+						oncomplete="PF('dlgUserEditar').show();"
+						update=":frmUserEditar:pnlUserEditar :msgGlobal">
+
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBCmdb.cmdb}" />
+
+					</p:commandButton>
+
+
+						<p:commandButton icon="ui-icon-search"
+						actionListener="#{MBCmdb.prepararEditar}"
+						oncomplete="PF('dlgUserEditar1').show();"
+						update=":frmUserEditar1:pnlUserEditar1 :msgGlobal">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBCmdb.cmdb}" />
+                 	</p:commandButton>								
+
+
+
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{MBCmdb.prepararNovo}"
+						oncomplete="PF('dlgUserNovo').show();"
+						update=":frmUserNovo:pnlUserNovo" />
+
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgUserNovo" closable="false" draggable="false"
+			resizable="false" modal="true" appendTo="@(body)"
+			header="Cmdb- Novo">
+			<h:form id="frmUserNovo">
+				<h:panelGrid id="pnlUserNovo" columns="2">
+
+
+
+					<p:outputLabel for="txtservidorEmpNovo" value="servidor: " />
+					<p:inputText id="txtservidorEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdb.cmdb.servidor}" required="true"
+						requiredMessage="O campo servidor  é obrigatório. " />
+
+					<p:outputLabel for="txtipEmpNovo" value="ip: " />
+					<p:inputText id="txtipEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdb.cmdb.ip}" required="true"
+						requiredMessage="O campo ip  é obrigatório. " />
+
+					<p:outputLabel for="txtversao_soEmpNovo" value="versao_so: " />
+					<p:inputText id="txtversao_soEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdb.cmdb.versao_so}" required="true"
+						requiredMessage="O campo versao_so  é obrigatório. " />
+
+					<p:outputLabel for="txtdatabaseEmpNovo" value="database: " />
+					<p:inputText id="txtdatabaseEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdb.cmdb.database}" required="true"
+						requiredMessage="O campo database  é obrigatório. " />
+
+					<p:outputLabel for="txtversao_databaseEmpNovo" value="versao_database: " />
+					<p:inputText id="txtversao_databaseEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdb.cmdb.versao_database}" required="true"
+						requiredMessage="O campo versao_database  é obrigatório. " />
+
+					<p:outputLabel for="txttipo_ambienteEmpNovo" value="tipo_ambiente: " />
+					<p:inputText id="txttipo_ambienteEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdb.cmdb.tipo_ambiente}" required="true"
+						requiredMessage="O campo tipo_ambiente  é obrigatório. " />
+
+					<p:outputLabel for="txtsgdbEmpNovo" value="sgdb: " />
+					<p:inputText id="txtsgdbEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdb.cmdb.sgdb}" required="true"
+						requiredMessage="O campo sgdb  é obrigatório. " />
+
+
+					<p:outputLabel for="txtreferenciaEmpNovo" value="referencia: " />
+					<p:inputText id="txtreferenciaEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdb.cmdb.referencia}" required="true"
+						requiredMessage="O campo referencia  é obrigatório. " />
+
+
+		
+					<p:outputLabel for="txtcontato1ProdNovo" value="Contato1: " />
+					<p:selectOneMenu id="txtcontato1ProdNovo" value="#{MBCmdb.cmdb.contato1.cod_usuario}"
+						filter="true" 
+						required="true" 
+						requiredMessage="O campo Contato1 é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Contato1" />
+						<f:selectItems value="#{MBCmdb.comboUsuarios}" var="item"
+							itemValue="#{item.cod_usuario}" itemLabel="#{item.nom_usuario}" />
+					</p:selectOneMenu>
+
+
+					<p:outputLabel for="txtcontato2ProdNovo" value="Contato2: " />
+					<p:selectOneMenu id="txtcontato2ProdNovo" value="#{MBCmdb.cmdb.contato2.cod_usuario}"
+						filter="true" 
+						required="true" 
+						requiredMessage="O campo Contato1 é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Contato2" />
+						<f:selectItems value="#{MBCmdb.comboUsuarios}" var="item"
+							itemValue="#{item.cod_usuario}" itemLabel="#{item.nom_usuario}" />
+					</p:selectOneMenu>
+
+
+					<p:outputLabel for="txtcontato3ProdNovo" value="Contato3: " />
+					<p:selectOneMenu id="txtcontato3ProdNovo" value="#{MBCmdb.cmdb.contato3.cod_usuario}"
+						filter="true" 
+						required="true" 
+						requiredMessage="O campo Contato3 é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Contato3" />
+						<f:selectItems value="#{MBCmdb.comboUsuarios}" var="item"
+							itemValue="#{item.cod_usuario}" itemLabel="#{item.nom_usuario}" />
+					</p:selectOneMenu>
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Gravar" actionListener="#{MBCmdb.novo}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserNovo', 'tabelaUserListagem'); " />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserNovo').hide();">
+						<p:resetInput target="pnlUserNovo" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserExcluir" closable="false"
+			draggable="false" resizable="false" header="Cmdb- Excluir"
+			modal="true" appendTo="@(body) ">
+
+			<h:form id="frmUserExcluir">
+				<h:panelGrid id="pnlUserExcluir" columns="2">
+
+					<h:outputLabel value="Código: " />
+					<h:outputText value="#{MBCmdb.cmdb.cod_planilha}" />
+
+					<h:outputLabel value="Servidor: " />
+					<h:outputText value="#{MBCmdb.cmdb.servidor}" />
+
+					<h:outputLabel value="ip: " />
+					<h:outputText value="#{MBCmdb.cmdb.ip}" />
+
+					<h:outputLabel value="versao_so: " />
+					<h:outputText value="#{MBCmdb.cmdb.versao_so}" />
+
+					<h:outputLabel value="database: " />
+					<h:outputText value="#{MBCmdb.cmdb.database}" />
+
+					<h:outputLabel value="versao database: " />
+					<h:outputText value="#{MBCmdb.cmdb.versao_database}" />
+
+					<h:outputLabel value="tipo ambiente: " />
+					<h:outputText value="#{MBCmdb.cmdb.tipo_ambiente}" />
+
+					<h:outputLabel value="sgdb: " />
+					<h:outputText value="#{MBCmdb.cmdb.sgdb}" />
+
+					<h:outputLabel value="referencia: " />
+					<h:outputText value="#{MBCmdb.cmdb.referencia}" />
+
+					<h:outputLabel value="Empresa: " />
+					<h:outputText value="#{MBCmdb.cmdb.empresa.nom_empresa}" />
+
+					<h:outputLabel value="Contato1: " />
+					<h:outputText value="#{MBCmdb.cmdb.contato1.nom_usuario}" />
+
+					<h:outputLabel value="Contato2: " />
+					<h:outputText value="#{MBCmdb.cmdb.contato2.nom_usuario}" />
+
+					<h:outputLabel value="Contato3: " />
+					<h:outputText value="#{MBCmdb.cmdb.contato3.nom_usuario}" />
+
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBCmdb.excluir}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="PF('dlgUserExcluir').hide(); tabelaUserListagem.clearFilters();" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserExcluir').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+
+
+	<p:dialog widgetVar="dlgUserEditar1" closable="false" draggable="false"
+			resizable="false" header="Cmdb- Editar " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserEditar1">
+				<h:panelGrid id="pnlUserEditar1" columns="2">
+
+
+					<p:outputLabel value="Codigo: " />
+					<h:outputText value="#{MBCmdb.cmdb.cod_planilha}" />
+
+
+					<p:outputLabel for="txtEmpresaProdEditar1" value="Empresa: " />
+					<p:selectOneMenu id="txtEmpresaProdEditar1"
+						value="#{MBCmdb.cmdb.empresa.cod_empresa}" filter="true"
+						required="true" requiredMessage="O campo Empresa é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione uma Empresa" />
+						<f:selectItems value="#{MBCmdb.comboEmpresas}" var="item"
+							itemValue="#{item.cod_empresa}" itemLabel="#{item.nom_empresa}" />
+					</p:selectOneMenu>
+
+
+			<p:outputLabel for="txtservidorProdEditar1" value="servidor" />
+			<h:inputText id="txtservidorProdEditar1"
+			value="#{MBCmdb.cmdb.servidor}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo servidor é obrigatório. " />
+			
+			<p:outputLabel for="txtipProdEditar1" value="ip" />
+			<h:inputText id="txtipProdEditar1"
+			value="#{MBCmdb.cmdb.ip}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo ip é obrigatório. " />			
+			
+			<p:outputLabel for="txtversao_soProdEditar1" value="versao_so" />
+			<h:inputText id="txtversao_soProdEditar1"
+			value="#{MBCmdb.cmdb.versao_so}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo versao_so é obrigatório. " />
+			
+			<p:outputLabel for="txtdatabaseProdEditar1" value="database" />
+			<h:inputText id="txtdatabaseProdEditar1"
+			value="#{MBCmdb.cmdb.database}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo database é obrigatório. " />
+			
+			<p:outputLabel for="txtversao_databaseProdEditar1" value="versao_database" />
+			<h:inputText id="txtversao_databaseProdEditar1"
+			value="#{MBCmdb.cmdb.versao_database}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo versao_database é obrigatório. " />
+												
+			<p:outputLabel for="txttipo_ambienteProdEditar1" value="tipo_ambiente" />
+			<h:inputText id="txttipo_ambienteProdEditar1"
+			value="#{MBCmdb.cmdb.tipo_ambiente}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo tipo_ambiente é obrigatório. " />
+			
+			<p:outputLabel for="txtsgdbProdEditar1" value="sgdb" />
+			<h:inputText id="txtsgdbProdEditar1"
+			value="#{MBCmdb.cmdb.sgdb}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo sgdb é obrigatório. " />
+			
+			<p:outputLabel for="txtreferenciaProdEditar1" value="referencia" />
+			<h:inputText id="txtreferenciaProdEditar1"
+			value="#{MBCmdb.cmdb.referencia}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo referencia é obrigatório. " />			
+						
+						
+
+					<p:outputLabel for="txtUsuario1ProdEditar1" value="Contato1: " />
+					<p:selectOneMenu id="txtUsuario1ProdEditar1"
+						value="#{MBCmdb.cmdb.contato1.cod_usuario}" filter="true"
+						required="true" requiredMessage="O campo Contato1 é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Contato1" />
+						<f:selectItems value="#{MBCmdb.comboUsuarios}" var="item"
+							itemValue="#{item.cod_usuario}" itemLabel="#{item.nom_usuario}" />
+					</p:selectOneMenu>
+
+				<p:outputLabel for="txtUsuario2ProdEditar1" value="Contato2: " />
+					<p:selectOneMenu id="txtUsuario2ProdEditar1"
+						value="#{MBCmdb.cmdb.contato2.cod_usuario}" filter="true"
+						required="true" requiredMessage="O campo Contato2 é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Contato2" />
+						<f:selectItems value="#{MBCmdb.comboUsuarios}" var="item"
+							itemValue="#{item.cod_usuario}" itemLabel="#{item.nom_usuario}" />
+					</p:selectOneMenu>
+
+
+				<p:outputLabel for="txtUsuario3ProdEditar1" value="Contato3: " />
+					<p:selectOneMenu id="txtUsuario3ProdEditar1"
+						value="#{MBCmdb.cmdb.contato3.cod_usuario}" filter="true"
+						required="true" requiredMessage="O campo Contato3 é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Contato3" />
+						<f:selectItems value="#{MBCmdb.comboUsuarios}" var="item"
+							itemValue="#{item.cod_usuario}" itemLabel="#{item.nom_usuario}" />
+					</p:selectOneMenu>
+
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Fechar" process="@this"
+						oncomplete="PF('dlgUserEditar1').hide();">
+						<p:resetInput target="pnlUserEditar1" />
+					</p:commandButton>
+
+			</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserEditar" closable="false" draggable="false"
+			resizable="false" header="Cmdb- Editar " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserEditar">
+				<h:panelGrid id="pnlUserEditar" columns="2">
+
+
+					<p:outputLabel value="Codigo: " />
+					<h:outputText value="#{MBCmdb.cmdb.cod_planilha}" />
+
+
+					<p:outputLabel for="txtEmpresaProdEditar" value="Empresa: " />
+					<p:selectOneMenu id="txtEmpresaProdEditar"
+						value="#{MBCmdb.cmdb.empresa.cod_empresa}" filter="true"
+						required="true" requiredMessage="O campo Empresa é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione uma Empresa" />
+						<f:selectItems value="#{MBCmdb.comboEmpresas}" var="item"
+							itemValue="#{item.cod_empresa}" itemLabel="#{item.nom_empresa}" />
+					</p:selectOneMenu>
+
+
+			<p:outputLabel for="txtservidorProdEditar" value="servidor" />
+			<h:inputText id="txtservidorProdEditar"
+			value="#{MBCmdb.cmdb.servidor}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo servidor é obrigatório. " />
+			
+			<p:outputLabel for="txtipProdEditar" value="ip" />
+			<h:inputText id="txtipProdEditar"
+			value="#{MBCmdb.cmdb.ip}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo ip é obrigatório. " />			
+			
+			<p:outputLabel for="txtversao_soProdEditar" value="versao_so" />
+			<h:inputText id="txtversao_soProdEditar"
+			value="#{MBCmdb.cmdb.versao_so}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo versao_so é obrigatório. " />
+			
+			<p:outputLabel for="txtdatabaseProdEditar" value="database" />
+			<h:inputText id="txtdatabaseProdEditar"
+			value="#{MBCmdb.cmdb.database}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo database é obrigatório. " />
+			
+			<p:outputLabel for="txtversao_databaseProdEditar" value="versao_database" />
+			<h:inputText id="txtversao_databaseProdEditar"
+			value="#{MBCmdb.cmdb.versao_database}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo versao_database é obrigatório. " />
+												
+			<p:outputLabel for="txttipo_ambienteProdEditar" value="tipo_ambiente" />
+			<h:inputText id="txttipo_ambienteProdEditar"
+			value="#{MBCmdb.cmdb.tipo_ambiente}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo tipo_ambiente é obrigatório. " />
+			
+			<p:outputLabel for="txtsgdbProdEditar" value="sgdb" />
+			<h:inputText id="txtsgdbProdEditar"
+			value="#{MBCmdb.cmdb.sgdb}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo sgdb é obrigatório. " />
+			
+			<p:outputLabel for="txtreferenciaProdEditar" value="referencia" />
+			<h:inputText id="txtreferenciaProdEditar"
+			value="#{MBCmdb.cmdb.referencia}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo referencia é obrigatório. " />			
+						
+						
+
+					<p:outputLabel for="txtUsuario1ProdEditar" value="Contato1: " />
+					<p:selectOneMenu id="txtUsuario1ProdEditar"
+						value="#{MBCmdb.cmdb.contato1.cod_usuario}" filter="true"
+						required="true" requiredMessage="O campo Contato1 é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Contato1" />
+						<f:selectItems value="#{MBCmdb.comboUsuarios}" var="item"
+							itemValue="#{item.cod_usuario}" itemLabel="#{item.nom_usuario}" />
+					</p:selectOneMenu>
+
+				<p:outputLabel for="txtUsuario2ProdEditar" value="Contato2: " />
+					<p:selectOneMenu id="txtUsuario2ProdEditar"
+						value="#{MBCmdb.cmdb.contato2.cod_usuario}" filter="true"
+						required="true" requiredMessage="O campo Contato2 é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Contato2" />
+						<f:selectItems value="#{MBCmdb.comboUsuarios}" var="item"
+							itemValue="#{item.cod_usuario}" itemLabel="#{item.nom_usuario}" />
+					</p:selectOneMenu>
+
+
+				<p:outputLabel for="txtUsuario3ProdEditar" value="Contato3: " />
+					<p:selectOneMenu id="txtUsuario3ProdEditar"
+						value="#{MBCmdb.cmdb.contato3.cod_usuario}" filter="true"
+						required="true" requiredMessage="O campo Contato3 é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Contato3" />
+						<f:selectItems value="#{MBCmdb.comboUsuarios}" var="item"
+							itemValue="#{item.cod_usuario}" itemLabel="#{item.nom_usuario}" />
+					</p:selectOneMenu>
+
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Editar"
+						actionListener="#{MBCmdb.editar}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserEditar', 'tabelaUserListagem');" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserEditar').hide();">
+						<p:resetInput target="pnlUserEditar" />
+					</p:commandButton>
+
+
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- euclides teste01 -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<f:event listener="#{MBLinkCadastro.carregarListagem}"
+			type="preRenderView" />
+		<h:form id="frmUserListagem">
+			<p:dataTable id="tblUserListagem" widgetVar="tabelaUserListagem"
+				value="#{MBLinkCadastro.itens}" var="item"
+				emptyMessage="Nenhum registro encontrado." paginator="true" rows="10"
+				filteredValue="#{MBLinkCadastro.itensfiltrados}">
+				<f:facet name="header">
+					<h:outputText value="Link / Aplicativo Cadastro- Listagem" />
+				</f:facet>
+
+
+	
+				<p:column headerText="Descricao"
+					filterBy="#{item.descricao_link_cadastro}"
+					sortBy="#{item.descricao_link_cadastro}">
+					<h:outputText value="#{item.descricao_link_cadastro}" />
+				</p:column>
+
+				
+						
+
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgUserExcluir').show();"
+						update=":frmUserExcluir:pnlUserExcluir">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBLinkCadastro.linkCadastro}" />
+					</p:commandButton>
+
+
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{MBLinkCadastro.prepararEditar}"
+						oncomplete="PF('dlgUserEditar').show();"
+						update=":frmUserEditar:pnlUserEditar :msgGlobal">
+
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBLinkCadastro.linkCadastro}" />
+
+
+         </p:commandButton>
+
+
+					<p:commandButton icon="ui-icon-search"
+						actionListener="#{MBLinkCadastro.prepararEditar}"
+						oncomplete="PF('dlgUserVisualizar').show();"
+						update=":frmUserVisualizar:pnlUserVisualizar :msgGlobal">
+
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBLinkCadastro.linkCadastro}" />
+
+                     
+					</p:commandButton>
+
+
+					<p:commandButton icon="ui-icon-extlink"
+						actionListener="#{MBFerramenta.prepararEditar(item.comando2)}"
+						update=":frmUserAbrir:pnlUserAbrir :msgGlobal">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBFerramenta.ferramenta}" />
+					</p:commandButton>
+					
+					
+                     <p:commandButton icon="ui-icon-link"
+						actionListener="#{MBFerramenta.prepararEditar(item.comando3)}"
+						update=":frmUserInternet:pnlUserInternet :msgGlobal">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBFerramenta.ferramenta}" />
+					</p:commandButton>
+					
+					
+                     <p:commandButton icon="ui-icon-folder-open"
+						actionListener="#{MBFerramenta.prepararEditar(item.comando4)}"
+						update=":frmUserExplorer:pnlUserExplorer :msgGlobal">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBFerramenta.ferramenta}" />
+					</p:commandButton>
+            
+
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{MBLinkCadastro.prepararNovo}"
+						oncomplete="PF('dlgUserNovo').show();"
+						update=":frmUserNovo:pnlUserNovo" />
+
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+
+		<p:dialog widgetVar="dlgUserNovo" closable="false" draggable="false"
+			resizable="false" modal="true" appendTo="@(body)" header="Link Cadastro- Novo">
+			<h:form id="frmUserNovo">
+				<h:panelGrid id="pnlUserNovo" columns="2">
+
+
+
+					
+	
+					<p:outputLabel for="txtProgramaEmpNovo" value="Descrição: " />
+					<p:inputText id="txtProgramaEmpNovo" size="30" maxlength="50"
+						value="#{MBLinkCadastro.linkCadastro.descricao_link_cadastro}" required="true"
+						requiredMessage="O campo Descrição  é obrigatório. " />
+
+
+					<p:outputLabel for="txtCaminhoNovo" value="Link / Aplicativo: " />
+					<p:inputText id="txtCaminhoNovo" size="100" maxlength="4000"
+						value="#{MBLinkCadastro.linkCadastro.link_cadastro}" required="true"
+						requiredMessage="O campo Caminho  é obrigatório. " />
+
+
+
+
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+
+
+					<p:commandButton value="Gravar"
+						actionListener="#{MBLinkCadastro.novo}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserNovo', 'tabelaUserListagem'); " />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserNovo').hide();">
+						<p:resetInput target="pnlUserNovo" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserExcluir" closable="false"
+			draggable="false" resizable="false"
+			header="Link Cadastro- Excluir" modal="true"
+			appendTo="@(body) ">
+
+			<h:form id="frmUserExcluir">
+				<h:panelGrid id="pnlUserExcluir" columns="2">
+
+					<h:outputLabel value="Código: " />
+					<h:outputText value="#{MBLinkCadastro.linkCadastro.cod_link_cadastro}" />
+
+					<h:outputLabel value="Usuario: " />
+					<h:outputText value="#{MBLinkCadastro.linkCadastro.usuario.nom_usuario}" />
+
+					<h:outputLabel value="Programa: " />
+					<h:outputText value="#{MBLinkCadastro.linkCadastro.descricao_link_cadastro}" />
+
+					<h:outputLabel value="Caminho: " />
+					<h:outputText value="#{MBLinkCadastro.linkCadastro.link_cadastro}" />
+
+
+					<h:outputLabel value="Configuração: " />
+					<h:outputText value="#{MBLinkCadastro.linkCadastro.tipoconfig.tipo}" />
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBLinkCadastro.excluir}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="PF('dlgUserExcluir').hide(); tabelaUserListagem.clearFilters();" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserExcluir').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgUserAbrir" closable="false" draggable="false"
+			resizable="false" header="Ferramenta- Abrir " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserAbrir">
+				<h:panelGrid id="pnlUserAbrir" columns="2">
+					</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserInternet" closable="false" draggable="false"
+			resizable="false" header="Ferramenta- Abrir " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserInternet">
+				<h:panelGrid id="pnlUserInternet" columns="2">
+					</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgUserExplorer" closable="false" draggable="false"
+			resizable="false" header="Ferramenta- Abrir " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserExplorer">
+				<h:panelGrid id="pnlUserExplorer" columns="2">
+					</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog widgetVar="dlgUserEditar" closable="false" draggable="false"
+			resizable="false" header="Link Cadastro- Editar "
+			modal="true" appendTo="@(body) ">
+			<h:form id="frmUserEditar">
+				<h:panelGrid id="pnlUserEditar" columns="2">
+
+
+					<p:outputLabel for="txtDescProdEditar" value="Descrição" />
+					<h:inputText id="txtDescProdEditar"
+						value="#{MBLinkCadastro.linkCadastro.descricao_link_cadastro}" size="150" maxlength="4000"
+						required="true" requiredMessage="O campo Descrição é obrigatório. " />
+
+
+					<p:outputLabel for="txtNomeProdEditar" value="Link / Aplicativo" />
+					<h:inputText id="txtNomeProdEditar"
+						value="#{MBLinkCadastro.linkCadastro.link_cadastro}" size="150" maxlength="4000"
+						required="true" requiredMessage="O campo Link é obrigatório. " />
+
+					<p:outputLabel value="Configuração: " />
+					<h:outputText value="#{MBLinkCadastro.linkCadastro.tipoconfig.tipo}" />
+
+			
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+
+
+					<p:commandButton value="Editar"
+						actionListener="#{MBLinkCadastro.editar}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserEditar', 'tabelaUserListagem');" />
+
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserEditar').hide();">
+						<p:resetInput target="pnlUserEditar" />
+					</p:commandButton>
+
+				</h:panelGrid>
+			</h:form>
+
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserVisualizar" closable="false" draggable="false"
+			resizable="false" header="Link Cadastro- Visualizar "
+			modal="true" appendTo="@(body) ">
+			<h:form id="frmUserVisualizar">
+				<h:panelGrid id="pnlUserVisualizar" columns="2">
+
+
+					<p:outputLabel for="txtDescProdVisualizar" value="Descrição" />
+					<h:inputText id="txtDescProdVisualizar"
+						value="#{MBLinkCadastro.linkCadastro.descricao_link_cadastro}" size="150" maxlength="4000"
+						required="true" requiredMessage="O campo Descrição é obrigatório. " />
+
+
+					<p:outputLabel for="txtNomeProdVisualizar" value="Link" />
+					<h:inputText id="txtNomeProdVisualizar"
+						value="#{MBLinkCadastro.linkCadastro.link_cadastro}" size="150" maxlength="4000"
+						required="true" requiredMessage="O campo Link é obrigatório. " />
+
+					<p:outputLabel value="Configuração: " />
+					<h:outputText value="#{MBLinkCadastro.linkCadastro.tipoconfig.tipo}" />
+
+			
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Fechar" process="@this"
+						oncomplete="PF('dlgUserVisualizar').hide();">
+						<p:resetInput target="pnlUserVisualizar" />
+					</p:commandButton>
+
+				</h:panelGrid>
+			</h:form>
+
+
+		</p:dialog>
+
+
+
+	</ui:define>
+
+</ui:composition>

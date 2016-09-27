@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmEmpListagem">
+			<p:dataTable id="tblEmpresa" widgetVar="tabelaEmpresa"
+				idemptyMessage="Nenhum registro encontrado. "
+				value="#{MBEmpresa.itens}" var="item"
+				filteredValue="#{MBEmpresa.itensFiltrados}" paginator="true"
+				rows="100">
+
+				<f:facet name="header">
+                 Empresa - Listagem
+                 </f:facet>
+
+
+								
+				<p:column headerText="Empresa" sortBy="#{item.nom_empresa}"
+					filterBy="#{item.nom_empresa}">
+					<h:outputText value="#{item.nom_empresa}" />
+				</p:column>
+
+				<p:column headerText="CNPJ" sortBy="#{item.cnpj}"
+					filterBy="#{item.cnpj}">
+					<h:outputText value="#{item.cnpj}" />
+				</p:column>
+
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgEmpExcluir').show();"
+						update=":frmEmpExcluir:pnlEmpExcluir">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBEmpresa.empresa}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-pencil"
+						oncomplete="PF('dlgEmpEditar').show();"
+						update=":frmEmpEditar:pnlEmpEditar">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBEmpresa.empresa}" />
+					</p:commandButton>
+
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{MBEmpresa.prepararNovo}"
+						oncomplete="PF('dlgEmpNovo').show();"
+						update=":frmEmpNovo:pnlEmpNovo" />
+
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgEmpNovo" closable="false" draggable="false"
+			resizable="false" modal="true" appendTo="@(body)"
+			header="Empresa - Novo" >
+			<h:form id="frmEmpNovo">
+				<h:panelGrid id="pnlEmpNovo" columns="2">
+					<p:outputLabel for="txtDescEmpNovo" value="Empresa: " />
+					<p:inputText id="txtDescEmpNovo" size="30" maxlength="50"
+						value="#{MBEmpresa.empresa.nom_empresa}" 
+						required="true" 
+						requiredMessage="O campo descrição é obrigatório. " />
+				
+					<p:outputLabel for="txtCNPJEmpNovo" value="CNPJ: " />
+					<p:inputText id="txtCNPJEmpNovo" size="30" maxlength="50"
+						value="#{MBEmpresa.empresa.cnpj}" 
+						required="true" 
+						requiredMessage="O campo CNPJ é obrigatório. " />
+						
+
+				</h:panelGrid>
+			<h:panelGrid columns="2">
+					<p:commandButton value="Gravar"
+						actionListener="#{MBEmpresa.novo}"
+						oncomplete="verificar(xhr, status, args, 'dlgEmpNovo', 'tabelaEmpresa');"
+						update=":frmEmpListagem:tblEmpresa :msgGlobal " />
+					<p:commandButton value="Cancelar" process="@this" 
+						onclick="PF('dlgEmpNovo').hide();" >
+						<p:resetInput target="pnlEmpNovo" />
+					</p:commandButton>	
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgEmpExcluir" closable="false" draggable="false"
+			resizable="false" 
+			header="Empresa - Excluir" modal="true" appendTo="@(body)" >
+
+			<h:form id="frmEmpExcluir">
+				<h:panelGrid id="pnlEmpExcluir" columns="2">
+					<h:outputLabel value="Código: " />
+					<h:outputText value="#{MBEmpresa.empresa.cod_empresa}" />
+
+					<h:outputLabel value="nom_empresa: " />
+					<h:outputText value="#{MBEmpresa.empresa.nom_empresa}" />
+
+					<h:outputLabel value="CNPJ: " />
+					<h:outputText value="#{MBEmpresa.empresa.cnpj}" />
+					
+					
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBEmpresa.excluir}"
+						oncomplete="PF('dlgEmpExcluir').hide(); tabelaEmpresa.clearFilters();"
+						update=":frmEmpListagem:tblEmpresa :msgGlobal" />
+
+					<p:commandButton value="Cancelar" process="@this"
+						onclick="PF('dlgEmpExcluir').hide();" />
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgEmpEditar" closable="false" draggable="false"
+			resizable="false" 
+			header="Empresa Editar" modal="true" appendTo="@(body)" >
+			<h:form id="frmEmpEditar">
+				<h:panelGrid id="pnlEmpEditar" columns="2">
+					<p:outputLabel value="cod_empresa" />
+					<h:outputText value="#{MBEmpresa.empresa.cod_empresa}" />
+
+					<p:outputLabel for="txtDescProdEditar" value="nom_empresa" />
+					<h:inputText id="txtDescProdEditar" value="#{MBEmpresa.empresa.nom_empresa}" size="30"
+						maxlength="50" 
+						required="true" 
+						requiredMessage="O campo descrição é obrigatório. "/>
+
+
+					<p:outputLabel for="txtCNPJProdEditar" value="cnpj" />
+					<h:inputText id="txtCNPJProdEditar" value="#{MBEmpresa.empresa.cnpj}" size="30"
+						maxlength="50" 
+						required="true" 
+						requiredMessage="O campo CNPJ é obrigatório. "/>
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Editar"
+						actionListener="#{MBEmpresa.editar}"
+						oncomplete="verificar(xhr, status, args, 'dlgEmpEditar', 'tabelaEmpresa');"
+						update=":frmEmpListagem:tblEmpresa :msgGlobal" />
+					<p:commandButton value="Cancelar" process="@this"
+						onclick="PF('dlgEmpEditar').hide();">
+						<p:resetInput target="pnlEmpEditar" />
+						</p:commandButton>
+				</h:panelGrid>
+
+
+			</h:form>
+
+
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

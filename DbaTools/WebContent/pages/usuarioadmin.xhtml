@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<f:event listener="#{MBUsuarioAdmin.carregarListagem}" type="preRenderView" />
+		<h:form id="frmUserListagem">
+			<p:dataTable id="tblUserListagem" widgetVar="tabelaUserListagem"
+				value="#{MBUsuarioAdmin.itens}" var="item"
+				emptyMessage="Nenhum registro encontrado." paginator="true" rows="100"
+				filteredValue="#{MBUsuarioAdmin.itensfiltrados}">
+				<f:facet name="header">
+					<h:outputText value="Usuario - Listagem" />
+				</f:facet>
+
+
+				<p:column headerText="Nome" sortBy="#{item.nom_usuario}"
+					filterBy="#{item.nom_usuario}">
+					<h:outputText value="#{item.nom_usuario}" />
+				</p:column>
+
+				<p:column headerText="UsuarioRede" sortBy="#{item.usuario}"
+					filterBy="#{item.usuario}">
+					<h:outputText value="#{item.usuario}" />
+				</p:column>
+
+				<p:column headerText="UsuarioLdap" sortBy="#{item.usuarioldap}"
+					filterBy="#{item.usuarioldap}">
+					<h:outputText value="#{item.usuarioldap}" />
+				</p:column>
+
+
+				<p:column headerText="telefone" sortBy="#{item.telefone}"
+					filterBy="#{item.telefone}">
+					<h:outputText value="#{item.telefone}" />
+				</p:column>
+
+
+				<p:column headerText="email" sortBy="#{item.email}"
+					filterBy="#{item.email}">
+					<h:outputText value="#{item.email}" />
+				</p:column>
+
+
+				<p:column headerText="Empresa"
+					filterBy="#{item.empresa.nom_empresa}"
+					sortBy="#{item.empresa.nom_empresa}">
+					<h:outputText value="#{item.empresa.nom_empresa}" />
+				</p:column>
+
+
+				<p:column headerText="Perfil" filterBy="#{item.perfil.nom_perfil}"
+					sortBy="#{item.perfil.nom_perfil}">
+					<h:outputText value="#{item.perfil.nom_perfil}" />
+				</p:column>
+
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgUserExcluir').show();"
+						update=":frmUserExcluir:pnlUserExcluir">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBUsuarioAdmin.usuarioAdmin}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{MBUsuarioAdmin.prepararEditar}"
+						oncomplete="PF('dlgUserEditar').show();"
+						update=":frmUserEditar:pnlUserEditar :msgGlobal">
+
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBUsuarioAdmin.usuarioAdmin}" />
+
+					</p:commandButton>
+
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{MBUsuarioAdmin.prepararNovo}"
+						oncomplete="PF('dlgUserNovo').show();"
+						update=":frmUserNovo:pnlUserNovo" />
+
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgUserNovo" closable="false" draggable="false"
+			resizable="false" modal="true" appendTo="@(body)"
+			header="Usuario - Novo">
+			<h:form id="frmUserNovo">
+				<h:panelGrid id="pnlUserNovo" columns="2">
+
+					<p:outputLabel for="txtNomeEmpNovo" value="Nome: " />
+					<p:inputText id="txtNomeEmpNovo" size="30" maxlength="50"
+						value="#{MBUsuarioAdmin.usuarioAdmin.nom_usuario}" required="true"
+						requiredMessage="O campo Nome  é obrigatório. " />
+
+
+					<p:outputLabel for="txtUsuarioEmpNovo" value="UsuarioRede: " />
+					<p:inputText id="txtUsuarioEmpNovo" size="30" maxlength="50"
+						value="#{MBUsuarioAdmin.usuarioAdmin.usuario}" required="true"
+						requiredMessage="O campo Usuario  é obrigatório. " />
+
+					<p:outputLabel for="txtUsuarioldapEmpNovo" value="Usuarioldap: " />
+					<p:inputText id="txtUsuarioldapEmpNovo" size="30" maxlength="50"
+						value="#{MBUsuarioAdmin.usuarioAdmin.usuarioldap}" required="true"
+						requiredMessage="O campo UsuarioLdap  é obrigatório. " />
+
+					<p:outputLabel for="txtSenhaEmpNovo" value="SenhaLdap: " />
+					<p:password id="txtSenhaEmpNovo" size="30" maxlength="50"
+						value="#{MBUsuarioAdmin.usuarioAdmin.senha}" required="true"
+						requiredMessage="O campo senha  é obrigatório. " />
+
+
+					<p:outputLabel for="txtTelefoneEmpNovo" value="Telfone: " />
+					<p:inputMask id="txtTelefoneEmpNovo" size="30" maxlength="50"
+						value="#{MBUsuarioAdmin.usuarioAdmin.telefone}" required="true"
+						requiredMessage="O campo telefone  é obrigatório. " mask="(99)9999-9999"/>
+
+
+					<p:outputLabel for="txtEamilEmpNovo" value="Email: " />
+					<p:inputText id="txtEamilEmpNovo" size="30" maxlength="50"
+						value="#{MBUsuarioAdmin.usuarioAdmin.email}" required="true"
+						requiredMessage="O campo email  é obrigatório. " />
+
+
+					<p:outputLabel for="txtEmpresaEmpNovo" value="Empresa: " />
+					<p:selectOneMenu id="txtEmpresaEmpNovo"
+						value="#{MBUsuarioAdmin.usuarioAdmin.empresa.cod_empresa}" filter="true"
+						required="true" requiredMessage="O campo Empresa é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione uma Empresa" />
+						<f:selectItems value="#{MBUsuarioAdmin.comboEmpresas}" var="item"
+							itemValue="#{item.cod_empresa}" itemLabel="#{item.nom_empresa}" />
+					</p:selectOneMenu>
+
+
+
+					<p:outputLabel for="txtPerfilEmpNovo" value="Perfil: " />
+					<p:selectOneMenu id="txtPerfilEmpNovo"
+						value="#{MBUsuarioAdmin.usuarioAdmin.perfil.cod_perfil}" filter="true"
+						required="true" requiredMessage="O campo Perfil é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Perfil" />
+						<f:selectItems value="#{MBUsuarioAdmin.comboPerfils}" var="item"
+							itemValue="#{item.cod_perfil}" itemLabel="#{item.nom_perfil}" />
+					</p:selectOneMenu>
+
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Gravar" actionListener="#{MBUsuarioAdmin.novo}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserNovo', 'tabelaUserListagem'); " />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserNovo').hide();">
+						<p:resetInput target="pnlUserNovo" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserExcluir" closable="false"
+			draggable="false" resizable="false" header="Usuario - Excluir"
+			modal="true" appendTo="@(body) ">
+
+			<h:form id="frmUserExcluir">
+				<h:panelGrid id="pnlUserExcluir" columns="2">
+
+					<h:outputLabel value="Código: " />
+					<h:outputText value="#{MBUsuarioAdmin.usuarioAdmin.cod_usuario}" />
+
+					<h:outputLabel value="Nome: " />
+					<h:outputText value="#{MBUsuarioAdmin.usuarioAdmin.nom_usuario}" />
+
+					<h:outputLabel value="UsuarioRede: " />
+					<h:outputText value="#{MBUsuarioAdmin.usuarioAdmin.usuario}" />
+
+					<h:outputLabel value="UsuarioLdap: " />
+					<h:outputText value="#{MBUsuarioAdmin.usuarioAdmin.usuarioldap}" />
+ 
+					<h:outputLabel value="Telefone: " />
+					<h:outputText value="#{MBUsuarioAdmin.usuarioAdmin.telefone}" />
+
+					<h:outputLabel value="Email: " />
+					<h:outputText value="#{MBUsuarioAdmin.usuarioAdmin.email}" />
+
+					<h:outputLabel value="Empresa: " />
+					<h:outputText value="#{MBUsuarioAdmin.usuarioAdmin.empresa.nom_empresa}" />
+
+					<h:outputLabel value="Perfil: " />
+					<h:outputText value="#{MBUsuarioAdmin.usuarioAdmin.perfil.nom_perfil}" />
+
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBUsuarioAdmin.excluir}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="PF('dlgUserExcluir').hide(); tabelaUserListagem.clearFilters();" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserExcluir').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserEditar" closable="false" draggable="false"
+			resizable="false" header="Usuario - Editar " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserEditar">
+				<h:panelGrid id="pnlUserEditar" columns="2">
+
+
+					<p:outputLabel value="Codigo: " />
+					<h:outputText value="#{MBUsuarioAdmin.usuarioAdmin.cod_usuario}" />
+
+					<p:outputLabel for="txtNomeProdEditar" value="Nome" />
+					<h:inputText id="txtNomeProdEditar"
+						value="#{MBUsuarioAdmin.usuarioAdmin.nom_usuario}" size="30" maxlength="50"
+						required="true" requiredMessage="O campo Nome é obrigatório. " />
+
+
+					<p:outputLabel for="txtUsuarioProdEditar" value="UsuarioRede" />
+					<h:inputText id="txtUsuarioProdEditar"
+						value="#{MBUsuarioAdmin.usuarioAdmin.usuario}" size="30" maxlength="50"
+						required="true" requiredMessage="O campo usuario é obrigatório. " />
+
+					<p:outputLabel for="txtUsuarioldapProdEditar" value="UsuarioLdap" />
+					<h:inputText id="txtUsuarioldapProdEditar"
+						value="#{MBUsuarioAdmin.usuarioAdmin.usuarioldap}" size="30" maxlength="50"
+						required="true" requiredMessage="O campo usuarioldap é obrigatório. " />
+
+					<p:outputLabel for="txtSenhaProdEditar" value="SenhaLdap" />
+					<p:password id="txtSenhaProdEditar"
+						value="#{MBUsuarioAdmin.usuarioAdmin.senha}" size="30" maxlength="50"
+						required="true" requiredMessage="O campo senha é obrigatório. " />
+						
+					<p:outputLabel for="txtTelefoneProdEditar" value="Telefone" />
+					<h:inputText id="txtTelefoneProdEditar"
+						value="#{MBUsuarioAdmin.usuarioAdmin.telefone}" size="30" maxlength="50"
+						required="true" requiredMessage="O campo telefone é obrigatório. "/>
+
+					<p:outputLabel for="txtEmailProdEditar" value="Email" />
+					<h:inputText id="txtEmailProdEditar"
+						value="#{MBUsuarioAdmin.usuarioAdmin.email}" size="30" maxlength="50"
+						required="true" requiredMessage="O campo email é obrigatório. " />
+
+					<p:outputLabel for="txtEmpresaProdEditar" value="Empresa: " />
+					<p:selectOneMenu id="txtEmpresaProdEditar"
+						value="#{MBUsuarioAdmin.usuarioAdmin.empresa.cod_empresa}" filter="true"
+						required="true" requiredMessage="O campo Empresa é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione uma Empresa" />
+						<f:selectItems value="#{MBUsuarioAdmin.comboEmpresas}" var="item"
+							itemValue="#{item.cod_empresa}" itemLabel="#{item.nom_empresa}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel for="txtPerfilProdEditar" value="Perfil: " />
+					<p:selectOneMenu id="txtPerfilProdEditar"
+						value="#{MBUsuarioAdmin.usuarioAdmin.perfil.cod_perfil}" filter="true"
+						required="true" requiredMessage="O campo Perfil é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Perfil" />
+						<f:selectItems value="#{MBUsuarioAdmin.comboPerfils}" var="item"
+							itemValue="#{item.cod_perfil}" itemLabel="#{item.nom_perfil}" />
+					</p:selectOneMenu>
+
+
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Editar"
+						actionListener="#{MBUsuarioAdmin.editar}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserEditar', 'tabelaUserListagem');" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserEditar').hide();">
+						<p:resetInput target="pnlUserEditar" />
+					</p:commandButton>
+
+
+				</h:panelGrid>
+
+
+			</h:form>
+
+
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

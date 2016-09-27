@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<f:event listener="#{MBQtdDia.carregarListagem}" type="preRenderView" />
+		<h:form id="frmUserListagem">
+			<p:dataTable id="tblUserListagem" widgetVar="tabelaUserListagem"
+				value="#{MBQtdDia.itens}" var="item"
+				emptyMessage="Nenhum registro encontrado." paginator="true" rows="100"
+				filteredValue="#{MBQtdDia.itensfiltrados}">
+				<f:facet name="header">
+					<h:outputText value="QtdDia - Listagem" />
+				</f:facet>
+
+
+	     		<p:column headerText="QtdDia" sortBy="#{item.qtd_dias}"
+					filterBy="#{item.qtd_dias}">
+					<h:outputText value="#{item.qtd_dias}" />
+				</p:column>
+
+
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgUserExcluir').show();"
+						update=":frmUserExcluir:pnlUserExcluir">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBQtdDia.qtdDia}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{MBQtdDia.prepararEditar}"
+						oncomplete="PF('dlgUserEditar').show();"
+						update=":frmUserEditar:pnlUserEditar :msgGlobal">
+
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBQtdDia.qtdDia}" />
+
+					</p:commandButton>
+
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{MBQtdDia.prepararNovo}"
+						oncomplete="PF('dlgUserNovo').show();"
+						update=":frmUserNovo:pnlUserNovo" />
+
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgUserNovo" closable="false" draggable="false"
+			resizable="false" modal="true" appendTo="@(body)"
+			header="QtdDia - Novo">
+			<h:form id="frmUserNovo">
+				<h:panelGrid id="pnlUserNovo" columns="2">
+
+
+					<p:outputLabel for="txtQtdDiaEmpNovo" value="QtdDia: " />
+					<p:inputText id="txtQtdDiaEmpNovo" size="30" maxlength="50"
+						value="#{MBQtdDia.qtdDia.qtd_dias}" required="true"
+						requiredMessage="O campo QtdDia  é obrigatório. " />
+
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Gravar" actionListener="#{MBQtdDia.novo}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserNovo', 'tabelaUserListagem'); " />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserNovo').hide();">
+						<p:resetInput target="pnlUserNovo" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserExcluir" closable="false"
+			draggable="false" resizable="false" header="QtdDia - Excluir"
+			modal="true" appendTo="@(body) ">
+
+			<h:form id="frmUserExcluir">
+				<h:panelGrid id="pnlUserExcluir" columns="2">
+
+					<h:outputLabel value="Código: " />
+					<h:outputText value="#{MBQtdDia.qtdDia.qtidade_dias}" />
+
+					<h:outputLabel value="Qtd Dias: " />
+					<h:outputText value="#{MBQtdDia.qtdDia.qtd_dias}" />
+
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBQtdDia.excluir}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="PF('dlgUserExcluir').hide(); tabelaUserListagem.clearFilters();" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserExcluir').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserEditar" closable="false" draggable="false"
+			resizable="false" header="QtdDia - Editar " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserEditar">
+				<h:panelGrid id="pnlUserEditar" columns="2">
+
+
+					<p:outputLabel value="Codigo: " />
+					<h:outputText value="#{MBQtdDia.qtdDia.qtidade_dias}" />
+
+					<p:outputLabel for="txtNomeProdEditar" value="Qtd Dias" />
+					<h:inputText id="txtNomeProdEditar"
+						value="#{MBQtdDia.qtdDia.qtd_dias}" size="30" maxlength="50"
+						required="true" requiredMessage="O campo Qtd Dias é obrigatório. " />
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Editar"
+						actionListener="#{MBQtdDia.editar}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserEditar', 'tabelaUserListagem');" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserEditar').hide();">
+						<p:resetInput target="pnlUserEditar" />
+					</p:commandButton>
+
+
+				</h:panelGrid>
+
+
+			</h:form>
+
+
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

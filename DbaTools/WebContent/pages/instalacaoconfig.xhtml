@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<f:event listener="#{MBInstalacaoConfig.carregarListagem}" type="preRenderView" />
+		<h:form id="frmDbaToolsListagem">
+			<p:dataTable id="tblDbaToolsListagem" widgetVar="tabelaDbaToolsListagem"
+				value="#{MBInstalacaoConfig.itens}" var="item"
+				emptyMessage="Nenhum registro encontrado." paginator="true" rows="100"
+				filteredValue="#{MBInstalacaoConfig.itensfiltrados}">
+				<f:facet name="header">
+					<h:outputText value="Tipo Configuracao - Listagem" />
+				</f:facet>
+
+
+					
+				<p:column headerText="Nome Instalação" sortBy="#{item.nom_instalacao}"
+					filterBy="#{item.nom_instalacao}">
+					<h:outputText value="#{item.nom_instalacao}" />
+				</p:column>
+
+				<p:column headerText="Caminho" sortBy="#{item.caminho}"
+					filterBy="#{item.caminho}">
+					<h:outputText value="#{item.caminho}" />
+				</p:column>
+
+				<p:column headerText="Comando" sortBy="#{item.comando}"
+					filterBy="#{item.comando}">
+					<h:outputText value="#{item.comando}" />
+				</p:column>
+
+
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgDbaToolsExcluir').show();"
+						update=":frmDbaToolsExcluir:pnlDbaToolsExcluir">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBInstalacaoConfig.instalacaoConfig}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{MBInstalacaoConfig.prepararEditar}"
+						oncomplete="PF('dlgDbaToolsEditar').show();"
+						update=":frmDbaToolsEditar:pnlDbaToolsEditar :msgGlobal">
+
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBInstalacaoConfig.instalacaoConfig}" />
+
+					</p:commandButton>
+
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{MBInstalacaoConfig.prepararNovo}"
+						oncomplete="PF('dlgDbaToolsNovo').show();"
+						update=":frmDbaToolsNovo:pnlDbaToolsNovo" />
+
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgDbaToolsNovo" closable="false" draggable="false"
+			resizable="false" modal="true" appendTo="@(body)"
+			header="Tipo Configuracao - Novo">
+			<h:form id="frmDbaToolsNovo">
+				<h:panelGrid id="pnlDbaToolsNovo" columns="2">
+
+					<p:outputLabel for="txtNomeEmpNovo" value="Nome da Instalação: " />
+					<p:inputText id="txtNomeEmpNovo" size="30" maxlength="50"
+						value="#{MBInstalacaoConfig.instalacaoConfig.nom_instalacao}" required="true"
+						requiredMessage="O campo Nome Instalação é obrigatório. " />
+
+
+					<p:outputLabel for="txtCaminhoEmpNovo" value="Caminho: " />
+					<p:inputText id="txtCaminhoEmpNovo" size="100" maxlength="900"
+						value="#{MBInstalacaoConfig.instalacaoConfig.caminho}" required="true"
+						requiredMessage="O campo caminho  é obrigatório. " />
+
+
+					<p:outputLabel for="txtcomandoEmpNovo" value="Comando: " />
+					<p:inputText id="txtcomandoEmpNovo" size="100" maxlength="900"
+						value="#{MBInstalacaoConfig.instalacaoConfig.comando}" required="true"
+						requiredMessage="O campo comando  é obrigatório. " />
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Gravar" actionListener="#{MBInstalacaoConfig.novo}"
+						update=":msgGlobal :frmDbaToolsListagem:tblDbaToolsListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgDbaToolsNovo', 'tabelaDbaToolsListagem'); " />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgDbaToolsNovo').hide();">
+						<p:resetInput target="pnlDbaToolsNovo" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgDbaToolsExcluir" closable="false"
+			draggable="false" resizable="false" header="Tipo Configuracao - Excluir"
+			modal="true" appendTo="@(body) ">
+
+			<h:form id="frmDbaToolsExcluir">
+				<h:panelGrid id="pnlDbaToolsExcluir" columns="2">
+
+					<h:outputLabel value="Código: " />
+					<h:outputText value="#{MBInstalacaoConfig.instalacaoConfig.cod_instalacao}" />
+
+					<h:outputLabel value="Nome da Instalação: " />
+					<h:outputText value="#{MBInstalacaoConfig.instalacaoConfig.nom_instalacao}" />
+
+					<h:outputLabel value="Caminho: " />
+					<h:outputText value="#{MBInstalacaoConfig.instalacaoConfig.caminho}" />
+
+					<h:outputLabel value="Comando: " />
+					<h:outputText value="#{MBInstalacaoConfig.instalacaoConfig.comando}" />
+
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBInstalacaoConfig.excluir}"
+						update=":msgGlobal :frmDbaToolsListagem:tblDbaToolsListagem"
+						oncomplete="PF('dlgDbaToolsExcluir').hide(); tabelaDbaToolsListagem.clearFilters();" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgDbaToolsExcluir').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgDbaToolsEditar" closable="false" draggable="false"
+			resizable="false" header="Tipo Configuracao - Editar " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmDbaToolsEditar">
+				<h:panelGrid id="pnlDbaToolsEditar" columns="2">
+
+
+					<p:outputLabel value="Codigo: " />
+					<h:outputText value="#{MBInstalacaoConfig.instalacaoConfig.cod_instalacao}" />
+
+					<p:outputLabel for="txtNomeProdEditar" value="Nome Instalação" />
+					<h:inputText id="txtNomeProdEditar"
+						value="#{MBInstalacaoConfig.instalacaoConfig.nom_instalacao}" size="30" maxlength="50"
+						required="true" requiredMessage="O campo Nome Instalação é obrigatório. " />
+
+
+					<p:outputLabel for="txtcaminhoProdEditar" value="Caminho" />
+					<h:inputText id="txtcaminhoProdEditar"
+						value="#{MBInstalacaoConfig.instalacaoConfig.caminho}" size="100" maxlength="900"
+						required="true" requiredMessage="O campo caminho é obrigatório. " />
+
+
+
+					<p:outputLabel for="txtcomandoProdEditar" value="Comando" />
+					<h:inputText id="txtcomandoProdEditar"
+						value="#{MBInstalacaoConfig.instalacaoConfig.comando}" size="100" maxlength="900"
+						required="true" requiredMessage="O campo Comando é obrigatório. " />
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Editar"
+						actionListener="#{MBInstalacaoConfig.editar}"
+						update=":msgGlobal :frmDbaToolsListagem:tblDbaToolsListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgDbaToolsEditar', 'tabelaDbaToolsListagem');" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgDbaToolsEditar').hide();">
+						<p:resetInput target="pnlDbaToolsEditar" />
+					</p:commandButton>
+
+
+				</h:panelGrid>
+
+
+			</h:form>
+
+
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

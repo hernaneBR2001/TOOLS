@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<f:event listener="#{MBBaseConhecimento.carregarListagem}"
+			type="preRenderView" />
+		<h:form id="frmUserListagem">
+			<p:dataTable id="tblUserListagem" widgetVar="tabelaUserListagem"
+				value="#{MBBaseConhecimento.itens}" var="item"
+				emptyMessage="Nenhum registro encontrado." paginator="true" rows="17"
+				filteredValue="#{MBBaseConhecimento.itensfiltrados}">
+				<f:facet name="header">
+					<h:outputText value="Base de Conhecimento - Listagem" />
+				</f:facet>
+
+	
+				<p:column headerText="Servidor" filterBy="#{item.servidor.servidor}"
+					sortBy="#{item.servidor.servidor}">
+					<h:outputText value="#{item.servidor.servidor}" />
+				</p:column>
+
+
+				<p:column headerText="Database" filterBy="#{item.database.database}"
+					sortBy="#{item.database.database}">
+					<h:outputText value="#{item.database.database}" />
+				</p:column>
+
+
+				<p:column headerText="Titulo" sortBy="#{item.titulo_doc}"
+					filterBy="#{item.titulo_doc}">
+					<h:outputText value="#{item.titulo_doc}" />
+				</p:column>
+
+
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgUserExcluir').show();"
+						update=":frmUserExcluir:pnlUserExcluir">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBBaseConhecimento.baseConhecimento}" />
+					</p:commandButton>
+                  
+
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{MBBaseConhecimento.prepararEditar}"
+						oncomplete="PF('dlgUserEditar').show();"
+						update=":frmUserEditar:pnlUserEditar :msgGlobal">
+                	<f:setPropertyActionListener value="#{item}"
+							target="#{MBBaseConhecimento.baseConhecimento}" />
+                      </p:commandButton>
+           
+					
+
+         			<p:commandButton icon="ui-icon-search"
+						actionListener="#{MBBaseConhecimento.prepararEditar}"
+						oncomplete="PF('dlgUserVisualizar').show();"
+						update=":frmUserVisualizar:pnlUserVisualizar :msgGlobal">
+                	<f:setPropertyActionListener value="#{item}"
+							target="#{MBBaseConhecimento.baseConhecimento}" />
+   						
+			</p:commandButton>		
+
+
+
+		<p:commandButton icon="ui-icon-extlink"
+						actionListener="#{MBFerramenta.prepararEditar(item.comando3)}"
+						update=":frmUserAbrir:pnlUserAbrir :msgGlobal">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBFerramenta.ferramenta}" />
+					</p:commandButton>
+            
+
+		<p:commandButton icon="ui-icon-link"
+						actionListener="#{MBFerramenta.prepararEditar(item.comando2)}"
+						update=":frmUserInternet:pnlUserInternet :msgGlobal">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBFerramenta.ferramenta}" />
+					</p:commandButton>
+
+                
+                    <p:commandButton icon="ui-icon-folder-open"
+						actionListener="#{MBFerramenta.prepararEditar(item.comando4)}"
+						update=":frmUserExplorer:pnlUserExplorer :msgGlobal">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBFerramenta.ferramenta}" />
+					</p:commandButton>
+                
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{MBBaseConhecimento.prepararNovo}"
+						oncomplete="PF('dlgUserNovo').show();"
+						update=":frmUserNovo:pnlUserNovo" />
+
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgUserNovo" closable="false" draggable="false"
+			resizable="false" modal="true" appendTo="@(body)" header="Cmdb- Novo">
+			<h:form id="frmUserNovo">
+				<h:panelGrid id="pnlUserNovo" columns="2">
+
+	
+					<p:outputLabel for="txtservidorProdNovo" value="Servidor: " />
+					<p:selectOneMenu id="txtservidorProdNovo"
+						value="#{MBBaseConhecimento.baseConhecimento.servidor.servidor}"
+						filter="true" required="true"
+						requiredMessage="O campo Servidor é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Servidor" />
+						<f:selectItems value="#{MBBaseConhecimento.comboCmdbs}" var="item"
+							itemValue="#{item.servidor}" itemLabel="#{item.servidor}" />
+					</p:selectOneMenu>
+
+
+					<p:outputLabel for="txtfabProdNovo" value="Database: " />
+					<p:selectOneMenu id="txtfabProdNovo"
+						value="#{MBBaseConhecimento.baseConhecimento.database.database}"
+						filter="true" required="true"
+						requiredMessage="O campo Database é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Database" />
+						<f:selectItems value="#{MBBaseConhecimento.comboCmdbs}" var="item"
+							itemValue="#{item.database}" itemLabel="#{item.database}" />
+					</p:selectOneMenu>
+
+
+
+
+					<p:outputLabel for="txttituloEmpNovo" value="Titulo: " />
+					<p:inputText id="txttituloEmpNovo" size="30" maxlength="50"
+						value="#{MBBaseConhecimento.baseConhecimento.titulo_doc}"
+						required="true" requiredMessage="O campo Titulo é obrigatório. " />
+
+					<p:outputLabel for="txtipEmpNovo" value="Link: " />
+					<p:inputText id="txtipEmpNovo" size="30" maxlength="50"
+						value="#{MBBaseConhecimento.baseConhecimento.link}"
+						required="true" requiredMessage="O campo Link  é obrigatório. " />
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Gravar"
+						actionListener="#{MBBaseConhecimento.novo}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserNovo', 'tabelaUserListagem'); " />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserNovo').hide();">
+						<p:resetInput target="pnlUserNovo" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserExcluir" closable="false"
+			draggable="false" resizable="false"
+			header="Base de Conhecimento - Excluir" modal="true"
+			appendTo="@(body) ">
+
+			<h:form id="frmUserExcluir">
+				<h:panelGrid id="pnlUserExcluir" columns="2">
+
+					<h:outputLabel value="Código: " />
+					<h:outputText
+						value="#{MBBaseConhecimento.baseConhecimento.cod_conhecimento}" />
+
+					<h:outputLabel value="Empresa: " />
+					<h:outputText
+						value="#{MBBaseConhecimento.baseConhecimento.empresa.nom_empresa}" />
+
+					<h:outputLabel value="Servidor: " />
+					<h:outputText
+						value="#{MBBaseConhecimento.baseConhecimento.servidor.servidor}" />
+
+					<h:outputLabel value="Database: " />
+					<h:outputText
+						value="#{MBBaseConhecimento.baseConhecimento.database.database}" />
+
+					<h:outputLabel value="Titulo: " />
+					<h:outputText
+						value="#{MBBaseConhecimento.baseConhecimento.titulo_doc}" />
+
+					<h:outputLabel value="Link: " />
+					<h:outputText value="#{MBBaseConhecimento.baseConhecimento.link}" />
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBBaseConhecimento.excluir}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="PF('dlgUserExcluir').hide(); tabelaUserListagem.clearFilters();" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserExcluir').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+	<p:dialog widgetVar="dlgUserAbrir" closable="false" draggable="false"
+			resizable="false" header="Ferramenta- Abrir " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserAbrir">
+				<h:panelGrid id="pnlUserAbrir" columns="2">
+					</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	
+
+
+	<p:dialog widgetVar="dlgUserInternet" closable="false" draggable="false"
+			resizable="false" header="Ferramenta- Abrir " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserInternet">
+				<h:panelGrid id="pnlUserInternet" columns="2">
+					</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserExplorer" closable="false" draggable="false"
+			resizable="false" header="Ferramenta- Abrir " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserExplorer">
+				<h:panelGrid id="pnlUserExplorer" columns="2">
+					</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+
+		<p:dialog widgetVar="dlgUserEditar" closable="false" draggable="false"
+			resizable="false" header="Base de Conhecimento - Editar "
+			modal="true" appendTo="@(body) ">
+			<h:form id="frmUserEditar">
+				<h:panelGrid id="pnlUserEditar" columns="2">
+
+
+					<p:outputLabel value="Codigo: " />
+					<h:outputText
+						value="#{MBBaseConhecimento.baseConhecimento.cod_conhecimento}" />
+
+
+					<p:outputLabel value="Empresa: " />
+					<h:outputText
+						value="#{MBBaseConhecimento.baseConhecimento.empresa.nom_empresa}" />
+
+
+					<p:outputLabel for="txtServidor1ProdEditar" value="Servidor: " />
+					<p:selectOneMenu id="txtServidor1ProdEditar"
+						value="#{MBBaseConhecimento.baseConhecimento.servidor.servidor}"
+						filter="true" required="true"
+						requiredMessage="O campo Servidor é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Servidor" />
+						<f:selectItems value="#{MBBaseConhecimento.comboCmdbs}" var="item"
+							itemValue="#{item.servidor}" itemLabel="#{item.servidor}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel for="txtDatabase1ProdEditar" value="Database: " />
+					<p:selectOneMenu id="txtDatabase1ProdEditar"
+						value="#{MBBaseConhecimento.baseConhecimento.database.database}"
+						filter="true" required="true"
+						requiredMessage="O campo Database é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Database" />
+						<f:selectItems value="#{MBBaseConhecimento.comboCmdbs}" var="item"
+							itemValue="#{item.database}" itemLabel="#{item.database}" />
+					</p:selectOneMenu>
+
+
+
+					<p:outputLabel for="txtipProdEditar" value="Titulo" />
+					<h:inputText id="txtipProdEditar"
+						value="#{MBBaseConhecimento.baseConhecimento.titulo_doc}"
+						size="30" maxlength="50" required="true"
+						requiredMessage="O campo Titulo é obrigatório. " />
+
+					<p:outputLabel for="txtversao_soProdEditar" value="Link" />
+					<h:inputText id="txtversao_soProdEditar"
+						value="#{MBBaseConhecimento.baseConhecimento.link}" size="30"
+						maxlength="50" required="true"
+						requiredMessage="O campo Link é obrigatório. " />
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Editar"
+						actionListener="#{MBBaseConhecimento.editar}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserEditar', 'tabelaUserListagem');" />
+
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserEditar').hide();">
+						<p:resetInput target="pnlUserEditar" />
+					</p:commandButton>
+
+
+				</h:panelGrid>
+
+
+			</h:form>
+
+
+		</p:dialog>
+
+
+
+
+	<p:dialog widgetVar="dlgUserVisualizar" closable="false" draggable="false"
+			resizable="false" header="Link Cadastro- Visualizar "
+			modal="true" appendTo="@(body) ">
+			<h:form id="frmUserVisualizar">
+				<h:panelGrid id="pnlUserVisualizar" columns="2">
+
+
+					<h:outputLabel value="Código: " />
+					<h:outputText
+						value="#{MBBaseConhecimento.baseConhecimento.cod_conhecimento}" />
+
+					<h:outputLabel value="Empresa: " />
+					<h:outputText
+						value="#{MBBaseConhecimento.baseConhecimento.empresa.nom_empresa}" />
+
+					<h:outputLabel value="Servidor: " />
+					<h:outputText
+						value="#{MBBaseConhecimento.baseConhecimento.servidor.servidor}" />
+
+					<h:outputLabel value="Database: " />
+					<h:outputText
+						value="#{MBBaseConhecimento.baseConhecimento.database.database}" />
+
+					<h:outputLabel value="Titulo: " />
+					<h:outputText
+						value="#{MBBaseConhecimento.baseConhecimento.titulo_doc}" />
+
+					<h:outputLabel value="Link: " />
+					<h:outputText value="#{MBBaseConhecimento.baseConhecimento.link}" />
+
+			
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Fechar" process="@this"
+						oncomplete="PF('dlgUserVisualizar').hide();">
+						<p:resetInput target="pnlUserVisualizar" />
+					</p:commandButton>
+
+				</h:panelGrid>
+			</h:form>
+
+
+		</p:dialog>
+
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- euclides teste01 -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<f:event listener="#{MBCredencialUsuario.carregarListagem}"
+			type="preRenderView" />
+		<h:form id="frmUserListagem">
+			<p:dataTable id="tblUserListagem" widgetVar="tabelaUserListagem"
+				value="#{MBCredencialUsuario.itens}" var="item"
+				emptyMessage="Nenhum registro encontrado." paginator="true" rows="10"
+				filteredValue="#{MBCredencialUsuario.itensfiltrados}">
+				<f:facet name="header">
+					<h:outputText value="Ferias- Listagem" />
+				</f:facet>
+
+
+				
+				
+
+				<p:column headerText="Programa" sortBy="#{item.nomInstalacao}"
+					filterBy="#{item.nomInstalacao}">
+					<h:outputText value="#{item.nomInstalacao}" />
+				</p:column>
+
+				
+				<p:column headerText="Caminho" sortBy="#{item.caminho}"
+					filterBy="#{item.caminho}">
+					<h:outputText value="#{item.caminho}" />
+				</p:column>
+
+
+				<p:column headerText="Comando" sortBy="#{item.comando}"
+					filterBy="#{item.comando}">
+					<h:outputText value="#{item.comando}" />
+				</p:column>
+				
+				
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgUserExcluir').show();"
+						update=":frmUserExcluir:pnlUserExcluir">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBCredencialUsuario.credencialUsuario}" />
+					</p:commandButton>
+
+
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{MBCredencialUsuario.prepararEditar}"
+						oncomplete="PF('dlgUserEditar').show();"
+						update=":frmUserEditar:pnlUserEditar :msgGlobal">
+
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBCredencialUsuario.credencialUsuario}" />
+
+					</p:commandButton>
+
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{MBCredencialUsuario.prepararNovo}"
+						oncomplete="PF('dlgUserNovo').show();"
+						update=":frmUserNovo:pnlUserNovo" />
+
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgUserNovo" closable="false" draggable="false"
+			resizable="false" modal="true" appendTo="@(body)" header="Ferias- Novo">
+			<h:form id="frmUserNovo">
+				<h:panelGrid id="pnlUserNovo" columns="2">
+
+
+					<p:outputLabel for="txtProgramaEmpNovo" value="Programa: " />
+					<p:inputText id="txtProgramaEmpNovo" size="30" maxlength="50"
+						value="#{MBCredencialUsuario.credencialUsuario.nomInstalacao}" required="true"
+						requiredMessage="O campo Programa  é obrigatório. " />
+
+
+					<p:outputLabel for="txtCaminhoNovo" value="Caminho: " />
+					<p:inputText id="txtCaminhoNovo" size="100" maxlength="4000"
+						value="#{MBCredencialUsuario.credencialUsuario.caminho}" required="true"
+						requiredMessage="O campo Caminho  é obrigatório. " />
+
+
+					<p:outputLabel for="txtComandoNovo" value="Comando: " />
+					<p:inputText id="txtComandoNovo" size="150" maxlength="4000"
+						value="#{MBCredencialUsuario.credencialUsuario.comando}" required="true"
+						requiredMessage="O campo Comando  é obrigatório. " />
+
+
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Gravar"
+						actionListener="#{MBCredencialUsuario.novo}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserNovo', 'tabelaUserListagem'); " />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserNovo').hide();">
+						<p:resetInput target="pnlUserNovo" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserExcluir" closable="false"
+			draggable="false" resizable="false"
+			header="Ferias- Excluir" modal="true"
+			appendTo="@(body) ">
+
+			<h:form id="frmUserExcluir">
+				<h:panelGrid id="pnlUserExcluir" columns="2">
+
+					<h:outputLabel value="Código: " />
+					<h:outputText value="#{MBCredencialUsuario.credencialUsuario.cod_credencial}" />
+
+					<h:outputLabel value="Usuario: " />
+					<h:outputText value="#{MBCredencialUsuario.credencialUsuario.usuario.nom_usuario}" />
+
+					<h:outputLabel value="Programa: " />
+					<h:outputText value="#{MBCredencialUsuario.credencialUsuario.nomInstalacao}" />
+
+					<h:outputLabel value="Caminho: " />
+					<h:outputText value="#{MBCredencialUsuario.credencialUsuario.caminho}" />
+
+					<h:outputLabel value="Comando: " />
+					<h:outputText value="#{MBCredencialUsuario.credencialUsuario.comando}" />
+
+					<h:outputLabel value="Configuração: " />
+					<h:outputText value="#{MBCredencialUsuario.credencialUsuario.tipoconfig.tipo}" />
+
+		
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBCredencialUsuario.excluir}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="PF('dlgUserExcluir').hide(); tabelaUserListagem.clearFilters();" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserExcluir').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserEditar" closable="false" draggable="false"
+			resizable="false" header="Ferias- Editar "
+			modal="true" appendTo="@(body) ">
+			<h:form id="frmUserEditar">
+				<h:panelGrid id="pnlUserEditar" columns="2">
+
+
+			<p:outputLabel for="txtProgramaProdEditar" value="Caminho" />
+					<h:inputText id="txtProgramaProdEditar"
+						value="#{MBCredencialUsuario.credencialUsuario.nomInstalacao}" size="100" maxlength="4000"
+						required="true" requiredMessage="O campo Programa é obrigatório. " />
+
+	
+					<p:outputLabel for="txtNomeProdEditar" value="Caminho" />
+					<h:inputText id="txtNomeProdEditar"
+						value="#{MBCredencialUsuario.credencialUsuario.caminho}" size="100" maxlength="4000"
+						required="true" requiredMessage="O campo Caminho é obrigatório. " />
+
+
+					<p:outputLabel for="txtUsuarioProdEditar" value="Comando" />
+					<h:inputText id="txtUsuarioProdEditar"
+						value="#{MBCredencialUsuario.credencialUsuario.comando}" size="100" maxlength="4000"
+						required="true" requiredMessage="O campo Comando é obrigatório. " />
+
+
+					<p:outputLabel value="Configuração: " />
+					<h:outputText value="#{MBCredencialUsuario.credencialUsuario.tipoconfig.tipo}" />
+
+			
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Editar"
+						actionListener="#{MBCredencialUsuario.editar}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserEditar', 'tabelaUserListagem');" />
+
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserEditar').hide();">
+						<p:resetInput target="pnlUserEditar" />
+					</p:commandButton>
+
+
+				</h:panelGrid>
+			</h:form>
+
+
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

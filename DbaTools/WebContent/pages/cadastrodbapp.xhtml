@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<f:event listener="#{MBCadastroDbApp.carregarListagem}" type="preRenderView" />
+		<h:form id="frmUserListagem">
+			<p:dataTable id="tblUserListagem" widgetVar="tabelaUserListagem"
+				value="#{MBCadastroDbApp.itens}" var="item"
+				emptyMessage="Nenhum registro encontrado." paginator="true" rows="10"
+				filteredValue="#{MBCadastroDbApp.itensfiltrados}">
+				<f:facet name="header">
+					<h:outputText value="Cadastro Senha - Listagem" />
+				</f:facet>
+
+
+				
+				<p:column headerText="Database"
+					filterBy="#{item.cmdb.database}"
+					sortBy="#{item.cmdb.database}">
+					<h:outputText value="#{item.cmdb.database}" />
+				</p:column>
+
+				
+				<p:column headerText="Usuario" sortBy="#{item.usuario_bd_app}"
+					filterBy="#{item.usuario_bd_app}">
+					<h:outputText value="#{item.usuario_bd_app}" />
+				</p:column>
+
+
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgUserExcluir').show();"
+						update=":frmUserExcluir:pnlUserExcluir">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBCadastroDbApp.cadastroDbApp}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-search"
+						actionListener="#{MBCadastroDbApp.prepararEditar}"
+						oncomplete="PF('dlgUserEditar').show();"
+						update=":frmUserEditar:pnlUserEditar :msgGlobal">
+
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBCadastroDbApp.cadastroDbApp}" />
+
+					</p:commandButton>
+
+
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{MBCadastroDbApp.prepararEditar}"
+						oncomplete="PF('dlgUserEditar1').show();"
+						update=":frmUserEditar1:pnlUserEditar1 :msgGlobal">
+
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBCadastroDbApp.cadastroDbApp}" />
+
+					</p:commandButton>
+
+
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{MBCadastroDbApp.prepararNovo}"
+						oncomplete="PF('dlgUserNovo').show();"
+						update=":frmUserNovo:pnlUserNovo" />
+
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgUserNovo" closable="false" draggable="false"
+			resizable="false" modal="true" appendTo="@(body)"
+			header="Cmdb- Novo">
+			<h:form id="frmUserNovo">
+				<h:panelGrid id="pnlUserNovo" columns="2">
+
+			
+				<p:outputLabel for="txtfabProdNovo" value="Database: " />
+					<p:selectOneMenu id="txtfabProdNovo" value = "#{MBCadastroDbApp.cadastroDbApp.cmdb.database}" 
+						filter="true" 
+						required="true" 
+						requiredMessage="O campo Database é obrigatório. ">
+						<f:selectItem itemValue="" itemLabel="Selecione um Database" />
+						<f:selectItems value="#{MBCadastroDbApp.comboCmdbs}" var="item"
+							itemValue="#{item.database}" itemLabel="#{item.database}" />
+					</p:selectOneMenu>		
+			
+					<p:outputLabel for="txtservidorEmpNovo" value="Usuario: " />
+					<p:inputText id="txtservidorEmpNovo" size="30" maxlength="50"
+						value="#{MBCadastroDbApp.cadastroDbApp.usuario_bd_app}" required="true"
+						requiredMessage="O campo Usuario é obrigatório. " />
+
+					<p:outputLabel for="txtipEmpNovo" value="Senha: " />
+					<p:password id="txtipEmpNovo" size="30" maxlength="50"
+						value="#{MBCadastroDbApp.cadastroDbApp.senha_bd_app}" required="true"
+						requiredMessage="O campo Senha  é obrigatório. " />
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Gravar" actionListener="#{MBCadastroDbApp.novo}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserNovo', 'tabelaUserListagem'); " />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserNovo').hide();">
+						<p:resetInput target="pnlUserNovo" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserExcluir" closable="false"
+			draggable="false" resizable="false" header="Cadastro Senha - Excluir"
+			modal="true" appendTo="@(body) ">
+
+			<h:form id="frmUserExcluir">
+				<h:panelGrid id="pnlUserExcluir" columns="2">
+
+					<h:outputLabel value="Código: " />
+					<h:outputText value="#{MBCadastroDbApp.cadastroDbApp.cod_cadastro}" />
+
+					<h:outputLabel value="Database: " />
+					<h:outputText value="#{MBCadastroDbApp.cadastroDbApp.cmdb.database}" />
+
+					<h:outputLabel value="Usuario: " />
+					<h:outputText value="#{MBCadastroDbApp.cadastroDbApp.usuario_bd_app}" />
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBCadastroDbApp.excluir}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="PF('dlgUserExcluir').hide(); tabelaUserListagem.clearFilters();" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserExcluir').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserEditar" closable="false" draggable="false"
+			resizable="false" header="Cadastro Senha - Editar " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserEditar">
+				<h:panelGrid id="pnlUserEditar" columns="2">
+
+
+					<p:outputLabel value="Codigo: " />
+					<h:outputText value="#{MBCadastroDbApp.cadastroDbApp.cod_cadastro}" />
+
+			<p:outputLabel for="txtservidorProdEditar" value="Database" />
+			<h:inputText id="txtservidorProdEditar"
+			value="#{MBCadastroDbApp.cadastroDbApp.cmdb.database}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo Database é obrigatório. " />
+			
+			<p:outputLabel for="txtipProdEditar" value="Usuario" />
+			<h:inputText id="txtipProdEditar"
+			value="#{MBCadastroDbApp.cadastroDbApp.usuario_bd_app}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo Usuario é obrigatório. " />			
+			
+			<p:outputLabel for="txtversao_soProdEditar" value="Senha" />
+			<h:inputText id="txtversao_soProdEditar"
+			value="#{MBCadastroDbApp.cadastroDbApp.senha_bd_app}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo senha é obrigatório. " />
+			
+			
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+		
+					<p:commandButton value="Fechar" process="@this"
+						oncomplete="PF('dlgUserEditar').hide();">
+						<p:resetInput target="pnlUserEditar" />
+					</p:commandButton>
+
+
+				</h:panelGrid>
+
+
+			</h:form>
+
+
+		</p:dialog>
+		
+		<p:dialog widgetVar="dlgUserEditar1" closable="false" draggable="false"
+			resizable="false" header="Cadastro Senha - Editar " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserEditar1">
+				<h:panelGrid id="pnlUserEditar1" columns="2">
+
+
+					<p:outputLabel value="Codigo: " />
+					<h:outputText value="#{MBCadastroDbApp.cadastroDbApp.cod_cadastro}" />
+
+			<p:outputLabel for="txtservidorProdEditar1" value="Database" />
+			<h:inputText id="txtservidorProdEditar1"
+			value="#{MBCadastroDbApp.cadastroDbApp.cmdb.database}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo Database é obrigatório. " />
+			
+			<p:outputLabel for="txtipProdEditar1" value="Usuario" />
+			<h:inputText id="txtipProdEditar1"
+			value="#{MBCadastroDbApp.cadastroDbApp.usuario_bd_app}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo Usuario é obrigatório. " />			
+			
+			<p:outputLabel for="txtversao_soProdEditar1" value="Senha" />
+			<h:inputText id="txtversao_soProdEditar1"
+			value="#{MBCadastroDbApp.cadastroDbApp.senha_bd_app}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo senha é obrigatório. " />
+			
+			
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Editar"
+						actionListener="#{MBCadastroDbApp.editar}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserEditar1', 'tabelaUserListagem');" />
+
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserEditar1').hide();">
+						<p:resetInput target="pnlUserEditar1" />
+					</p:commandButton>
+
+
+				</h:panelGrid>
+
+
+			</h:form>
+
+
+		</p:dialog>		
+		
+	</ui:define>
+
+</ui:composition>

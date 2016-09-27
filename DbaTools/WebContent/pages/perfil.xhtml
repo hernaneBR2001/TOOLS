@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmPerListagem">
+			<p:dataTable id="tblPerfil" widgetVar="tabelaPerfil"
+				idemptyMessage="Nenhum registro encontrado. "
+				value="#{MBPerfil.itens}" var="item"
+				filteredValue="#{MBPerfil.itensFiltrados}" paginator="true"
+				rows="100">
+
+				<f:facet name="header">
+                 Perfil - Listagem
+                 </f:facet>
+
+
+				
+				<p:column headerText="Perfil" sortBy="#{item.nom_perfil}"
+					filterBy="#{item.nom_perfil}">
+					<h:outputText value="#{item.nom_perfil}" />
+				</p:column>
+
+
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgPerExcluir').show();"
+						update=":frmPerExcluir:pnlPerExcluir">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBPerfil.perfil}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-pencil"
+						oncomplete="PF('dlgPerEditar').show();"
+						update=":frmPerEditar:pnlPerEditar">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBPerfil.perfil}" />
+					</p:commandButton>
+
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{MBPerfil.prepararNovo}"
+						oncomplete="PF('dlgPerNovo').show();"
+						update=":frmPerNovo:pnlPerNovo" />
+
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgPerNovo" closable="false" draggable="false"
+			resizable="false" modal="true" appendTo="@(body)"
+			header="Perfil - Novo" >
+			<h:form id="frmPerNovo">
+				<h:panelGrid id="pnlPerNovo" columns="2">
+					<p:outputLabel for="txtNomPerfilPerNovo" value="Perfil: " />
+					<p:inputText id="txtNomPerfilPerNovo" size="30" maxlength="50"
+						value="#{MBPerfil.perfil.nom_perfil}" 
+						required="true" 
+						requiredMessage="O campo nome perfil é obrigatório. " />
+				
+						
+
+				</h:panelGrid>
+			<h:panelGrid columns="2">
+					<p:commandButton value="Gravar"
+						actionListener="#{MBPerfil.novo}"
+						oncomplete="verificar(xhr, status, args, 'dlgPerNovo', 'tabelaPerfil');"
+						update=":frmPerListagem:tblPerfil :msgGlobal " />
+					<p:commandButton value="Cancelar" process="@this" 
+						onclick="PF('dlgPerNovo').hide();" >
+						<p:resetInput target="pnlPerNovo" />
+					</p:commandButton>	
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgPerExcluir" closable="false" draggable="false"
+			resizable="false" 
+			header="Perfil - Excluir" modal="true" appendTo="@(body)" >
+
+			<h:form id="frmPerExcluir">
+				<h:panelGrid id="pnlPerExcluir" columns="2">
+					<h:outputLabel value="Código: " />
+					<h:outputText value="#{MBPerfil.perfil.cod_perfil}" />
+
+					<h:outputLabel value="nome perfil: " />
+					<h:outputText value="#{MBPerfil.perfil.nom_perfil}" />
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBPerfil.excluir}"
+						oncomplete="PF('dlgPerExcluir').hide(); tabelaPerfil.clearFilters();"
+						update=":frmPerListagem:tblPerfil :msgGlobal" />
+
+					<p:commandButton value="Cancelar" process="@this"
+						onclick="PF('dlgPerExcluir').hide();" />
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgPerEditar" closable="false" draggable="false"
+			resizable="false" 
+			header="Perfil Editar" modal="true" appendTo="@(body)" >
+			<h:form id="frmPerEditar">
+				<h:panelGrid id="pnlPerEditar" columns="2">
+					<p:outputLabel value="cod_perfil" />
+					<h:outputText value="#{MBPerfil.perfil.cod_perfil}" />
+
+					<p:outputLabel for="txtDescProdEditar" value="nome do perfil: " />
+					<h:inputText id="txtDescProdEditar" value="#{MBPerfil.perfil.nom_perfil}" size="30"
+						maxlength="50" 
+						required="true" 
+						requiredMessage="O campo descrição é obrigatório. "/>
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Editar"
+						actionListener="#{MBPerfil.editar}"
+						oncomplete="verificar(xhr, status, args, 'dlgPerEditar', 'tabelaPerfil');"
+						update=":frmPerListagem:tblPerfil :msgGlobal" />
+					<p:commandButton value="Cancelar" process="@this"
+						onclick="PF('dlgPerEditar').hide();">
+						<p:resetInput target="pnlPerEditar" />
+						</p:commandButton>
+				</h:panelGrid>
+
+
+			</h:form>
+
+
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

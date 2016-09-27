@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<f:event listener="#{MBCmdbPostgres.carregarListagem}" type="preRenderView" />
+		<h:form id="frmUserListagem">
+			<p:dataTable id="tblUserListagem" widgetVar="tabelaUserListagem"
+				value="#{MBCmdbPostgres.itens}" var="item"
+				emptyMessage="Nenhum registro encontrado." paginator="true" rows="300"
+				filteredValue="#{MBCmdbPostgres.itensfiltrados}">
+				<f:facet name="header">
+					<h:outputText value="CmdbPostgres- Listagem" />
+				</f:facet>
+
+				
+				<p:column headerText="Servidor" sortBy="#{item.servidor}"
+					filterBy="#{item.servidor}">
+					<h:outputText value="#{item.servidor}" />
+				</p:column>
+
+			<p:column headerText="Database/Aplicação" sortBy="#{item.database}"
+					filterBy="#{item.database}">
+					<h:outputText value="#{item.database}" />
+				</p:column>
+
+				<p:column headerText="Versao" sortBy="#{item.userso}"
+					filterBy="#{item.userso}">
+					<h:outputText value="#{item.userso}" />
+				</p:column>
+
+				<p:column headerText="Tipo" sortBy="#{item.tipo}"
+					filterBy="#{item.tipo}">
+					<h:outputText value="#{item.tipo}" />
+				</p:column>
+
+				<p:column headerText="sgdb" sortBy="#{item.opcao}"
+					filterBy="#{item.opcao}">
+					<h:outputText value="#{item.opcao}" />
+				</p:column>
+
+				<p:column headerText="referencia" sortBy="#{item.referencia}"
+					filterBy="#{item.referencia}">
+					<h:outputText value="#{item.referencia}" />
+				</p:column>
+
+
+				<p:column headerText="Ip" sortBy="#{item.ip}"
+					filterBy="#{item.ip}">
+					<h:outputText value="#{item.ip}" />
+				</p:column>
+
+
+				<p:column headerText="Versao SO" sortBy="#{item.versao_so}"
+					filterBy="#{item.versao_so}">
+					<h:outputText value="#{item.versao_so}" />
+				</p:column>
+
+<!-- 
+				<p:column headerText="Contato1" filterBy="#{item.contato1}"
+					sortBy="#{item.contato1}">
+					<h:outputText value="#{item.contato1}" />
+				</p:column>
+
+
+			<p:column headerText="Contato2" filterBy="#{item.contato2}"
+					sortBy="#{item.contato2}">
+					<h:outputText value="#{item.contato2}" />
+				</p:column>
+
+			<p:column headerText="Contato3" filterBy="#{item.contato3}"
+					sortBy="#{item.contato3}">
+					<h:outputText value="#{item.contato3}" />
+				</p:column>
+
+ -->
+
+				<p:column headerText="Opções">
+				
+				<!-- 
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgUserExcluir').show();"
+						update=":frmUserExcluir:pnlUserExcluir">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBCmdbPostgres.cmdbPostgres}" />
+					</p:commandButton>
+ -->
+					<p:commandButton icon="ui-icon-search"
+						actionListener="#{MBCmdbPostgres.prepararEditar}"
+						oncomplete="PF('dlgUserEditar').show();"
+						update=":frmUserEditar:pnlUserEditar :msgGlobal">
+
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBCmdbPostgres.cmdbPostgres}" />
+
+					</p:commandButton>
+
+				</p:column>
+
+	<!--			<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{MBCmdbPostgres.prepararNovo}"
+						oncomplete="PF('dlgUserNovo').show();"
+						update=":frmUserNovo:pnlUserNovo" />
+
+				</f:facet>
+     -->
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgUserNovo" closable="false" draggable="false"
+			resizable="false" modal="true" appendTo="@(body)"
+			header="CmdbPostgres- Novo">
+			<h:form id="frmUserNovo">
+				<h:panelGrid id="pnlUserNovo" columns="2">
+
+					<p:outputLabel for="txtservidorEmpNovo" value="servidor: " />
+					<p:inputText id="txtservidorEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdbPostgres.cmdbPostgres.servidor}" required="true"
+						requiredMessage="O campo servidor  é obrigatório. " />
+
+					<p:outputLabel for="txtipEmpNovo" value="ip: " />
+					<p:inputText id="txtipEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdbPostgres.cmdbPostgres.ip}" required="true"
+						requiredMessage="O campo ip  é obrigatório. " />
+
+					<p:outputLabel for="txtversao_soEmpNovo" value="versao_so: " />
+					<p:inputText id="txtversao_soEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdbPostgres.cmdbPostgres.versao_so}" required="true"
+						requiredMessage="O campo versao_so  é obrigatório. " />
+
+					<p:outputLabel for="txtdatabaseEmpNovo" value="database: " />
+					<p:inputText id="txtdatabaseEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdbPostgres.cmdbPostgres.database}" required="true"
+						requiredMessage="O campo database  é obrigatório. " />
+
+					<p:outputLabel for="txtversao_databaseEmpNovo" value="versao_database: " />
+					<p:inputText id="txtversao_databaseEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdbPostgres.cmdbPostgres.userso}" required="true"
+						requiredMessage="O campo versao_database  é obrigatório. " />
+
+					<p:outputLabel for="txttipo_ambienteEmpNovo" value="tipo_ambiente: " />
+					<p:inputText id="txttipo_ambienteEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdbPostgres.cmdbPostgres.tipo}" required="true"
+						requiredMessage="O campo tipo  é obrigatório. " />
+
+					<p:outputLabel for="txtsgdbEmpNovo" value="sgdb: " />
+					<p:inputText id="txtsgdbEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdbPostgres.cmdbPostgres.opcao}" required="true"
+						requiredMessage="O campo sgdb  é obrigatório. " />
+
+
+					<p:outputLabel for="txtreferenciaEmpNovo" value="referencia: " />
+					<p:inputText id="txtreferenciaEmpNovo" size="30" maxlength="50"
+						value="#{MBCmdbPostgres.cmdbPostgres.referencia}" required="true"
+						requiredMessage="O campo referencia  é obrigatório. " />
+
+
+					<p:outputLabel for="txtcontato1EmpNovo" value="contato1: " />
+					<p:inputText id="txtcontato1EmpNovo" size="30" maxlength="50"
+						value="#{MBCmdbPostgres.cmdbPostgres.contato1}" required="true"
+						requiredMessage="O campo contato1  é obrigatório. " />
+		
+
+					<p:outputLabel for="txtcontato2EmpNovo" value="contato2: " />
+					<p:inputText id="txtcontato2EmpNovo" size="30" maxlength="50"
+						value="#{MBCmdbPostgres.cmdbPostgres.contato1}" required="true"
+						requiredMessage="O campo contato2  é obrigatório. " />
+
+					<p:outputLabel for="txtcontato3EmpNovo" value="contato3: " />
+					<p:inputText id="txtcontato3EmpNovo" size="30" maxlength="50"
+						value="#{MBCmdbPostgres.cmdbPostgres.contato3}" required="true"
+						requiredMessage="O campo contato3  é obrigatório. " />
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Gravar" actionListener="#{MBCmdbPostgres.novo}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgUserNovo', 'tabelaUserListagem'); " />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserNovo').hide();">
+						<p:resetInput target="pnlUserNovo" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserExcluir" closable="false"
+			draggable="false" resizable="false" header="CmdbPostgres- Excluir"
+			modal="true" appendTo="@(body) ">
+
+			<h:form id="frmUserExcluir">
+				<h:panelGrid id="pnlUserExcluir" columns="2">
+
+					<h:outputLabel value="Servidor: " />
+					<h:outputText value="#{MBCmdbPostgres.cmdbPostgres.servidor}" />
+
+					<h:outputLabel value="ip: " />
+					<h:outputText value="#{MBCmdbPostgres.cmdbPostgres.ip}" />
+
+					<h:outputLabel value="versao_so: " />
+					<h:outputText value="#{MBCmdbPostgres.cmdbPostgres.versao_so}" />
+
+					<h:outputLabel value="database: " />
+					<h:outputText value="#{MBCmdbPostgres.cmdbPostgres.database}" />
+
+					<h:outputLabel value="versao database: " />
+					<h:outputText value="#{MBCmdbPostgres.cmdbPostgres.userso}" />
+
+					<h:outputLabel value="tipo ambiente: " />
+					<h:outputText value="#{MBCmdbPostgres.cmdbPostgres.tipo}" />
+
+					<h:outputLabel value="opcao: " />
+					<h:outputText value="#{MBCmdbPostgres.cmdbPostgres.opcao}" />
+
+					<h:outputLabel value="referencia: " />
+					<h:outputText value="#{MBCmdbPostgres.cmdbPostgres.referencia}" />
+
+
+					<h:outputLabel value="Contato1: " />
+					<h:outputText value="#{MBCmdbPostgres.cmdbPostgres.contato1}" />
+
+					<h:outputLabel value="Contato2: " />
+					<h:outputText value="#{MBCmdbPostgres.cmdbPostgres.contato2}" />
+
+					<h:outputLabel value="Contato3: " />
+					<h:outputText value="#{MBCmdbPostgres.cmdbPostgres.contato3}" />
+
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBCmdbPostgres.excluir}"
+						update=":msgGlobal :frmUserListagem:tblUserListagem"
+						oncomplete="PF('dlgUserExcluir').hide(); tabelaUserListagem.clearFilters();" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgUserExcluir').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgUserEditar" closable="false" draggable="false"
+			resizable="false" header="CmdbPostgres- Visualizar " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmUserEditar">
+				<h:panelGrid id="pnlUserEditar" columns="2">
+
+
+			<p:outputLabel for="txtservidorProdEditar" value="servidor" />
+			<h:inputText id="txtservidorProdEditar"
+			value="#{MBCmdbPostgres.cmdbPostgres.servidor}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo servidor é obrigatório. " />
+			
+			<p:outputLabel for="txtipProdEditar" value="ip" />
+			<h:inputText id="txtipProdEditar"
+			value="#{MBCmdbPostgres.cmdbPostgres.ip}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo ip é obrigatório. " />			
+			
+			<p:outputLabel for="txtversao_soProdEditar" value="versao_so" />
+			<h:inputText id="txtversao_soProdEditar"
+			value="#{MBCmdbPostgres.cmdbPostgres.versao_so}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo versao_so é obrigatório. " />
+			
+			<p:outputLabel for="txtdatabaseProdEditar" value="database" />
+			<h:inputText id="txtdatabaseProdEditar"
+			value="#{MBCmdbPostgres.cmdbPostgres.database}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo database é obrigatório. " />
+			
+			<p:outputLabel for="txtversao_databaseProdEditar" value="versao_database" />
+			<h:inputText id="txtversao_databaseProdEditar"
+			value="#{MBCmdbPostgres.cmdbPostgres.userso}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo versao_database é obrigatório. " />
+												
+			<p:outputLabel for="txttipo_ambienteProdEditar" value="tipo_ambiente" />
+			<h:inputText id="txttipo_ambienteProdEditar"
+			value="#{MBCmdbPostgres.cmdbPostgres.tipo}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo tipo_ambiente é obrigatório. " />
+			
+			<p:outputLabel for="txtsgdbProdEditar" value="sgdb" />
+			<h:inputText id="txtsgdbProdEditar"
+			value="#{MBCmdbPostgres.cmdbPostgres.opcao}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo opcao é obrigatório. " />
+			
+			<p:outputLabel for="txtreferenciaProdEditar" value="referencia" />
+			<h:inputText id="txtreferenciaProdEditar"
+			value="#{MBCmdbPostgres.cmdbPostgres.referencia}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo referencia é obrigatório. " />			
+						
+			<p:outputLabel for="txtcontato1ProdEditar" value="contato1" />
+			<h:inputText id="txtcontato1ProdEditar"
+			value="#{MBCmdbPostgres.cmdbPostgres.contato1}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo contato1 é obrigatório. " />			
+
+			<p:outputLabel for="txtcontato2ProdEditar" value="contato2" />
+			<h:inputText id="txtcontato2ProdEditar"
+			value="#{MBCmdbPostgres.cmdbPostgres.contato2}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo contato2 é obrigatório. " />			
+
+			<p:outputLabel for="txtcontato3ProdEditar" value="contato3" />
+			<h:inputText id="txtcontato3ProdEditar"
+			value="#{MBCmdbPostgres.cmdbPostgres.contato3}" size="30" maxlength="50"
+			required="true" requiredMessage="O campo contato3 é obrigatório. " />			
+						
+
+
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Fechar" process="@this"
+						oncomplete="PF('dlgUserEditar').hide();">
+						<p:resetInput target="pnlUserEditar" />
+					</p:commandButton>
+
+
+				</h:panelGrid>
+
+
+			</h:form>
+
+
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

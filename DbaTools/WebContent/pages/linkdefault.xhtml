@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<f:event listener="#{MBLinkDefault.carregarListagem}" type="preRenderView" />
+		<h:form id="frmDbaToolsListagem">
+			<p:dataTable id="tblDbaToolsListagem" widgetVar="tabelaDbaToolsListagem"
+				value="#{MBLinkDefault.itens}" var="item"
+				emptyMessage="Nenhum registro encontrado." paginator="true" rows="10"
+				filteredValue="#{MBLinkDefault.itensfiltrados}">
+				<f:facet name="header">
+					<h:outputText value="Link Default - Listagem" />
+				</f:facet>
+
+
+				
+				<p:column headerText="Descrição Link" sortBy="#{item.descricao_link_default}"
+					filterBy="#{item.descricao_link_default}">
+					<h:outputText value="#{item.descricao_link_default}" />
+				</p:column>
+
+
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgDbaToolsExcluir').show();"
+						update=":frmDbaToolsExcluir:pnlDbaToolsExcluir">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBLinkDefault.linkDefault}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{MBLinkDefault.prepararEditar}"
+						oncomplete="PF('dlgDbaToolsEditar').show();"
+						update=":frmDbaToolsEditar:pnlDbaToolsEditar :msgGlobal">
+		<f:setPropertyActionListener value="#{item}"
+							target="#{MBLinkDefault.linkDefault}" />
+
+</p:commandButton>
+
+					<p:commandButton icon="ui-icon-search"
+						actionListener="#{MBLinkCadastro.prepararEditar}"
+						oncomplete="PF('dlgUserVisualizar').show();"
+						update=":frmUserVisualizar:pnlUserVisualizar :msgGlobal">
+    
+
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBLinkDefault.linkDefault}" />
+
+					</p:commandButton>
+
+
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{MBLinkDefault.prepararNovo}"
+						oncomplete="PF('dlgDbaToolsNovo').show();"
+						update=":frmDbaToolsNovo:pnlDbaToolsNovo" />
+
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgDbaToolsNovo" closable="false" draggable="false"
+			resizable="false" modal="true" appendTo="@(body)"
+			header="Link Default - Novo">
+			<h:form id="frmDbaToolsNovo">
+				<h:panelGrid id="pnlDbaToolsNovo" columns="2">
+
+					<p:outputLabel for="txtNomeEmpNovo" value="Nome da Instalação: " />
+					<p:inputText id="txtNomeEmpNovo" size="30" maxlength="50"
+						value="#{MBLinkDefault.linkDefault.descricao_link_default}" required="true"
+						requiredMessage="O campo Descrição Link é obrigatório. " />
+
+
+					<p:outputLabel for="txtLinkEmpNovo" value="Link: " />
+					<p:inputText id="txtLinkEmpNovo" size="100" maxlength="900"
+						value="#{MBLinkDefault.linkDefault.link_default}" required="true"
+						requiredMessage="O campo link_default  é obrigatório. " />
+
+
+		
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Gravar" actionListener="#{MBLinkDefault.novo}"
+						update=":msgGlobal :frmDbaToolsListagem:tblDbaToolsListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgDbaToolsNovo', 'tabelaDbaToolsListagem'); " />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgDbaToolsNovo').hide();">
+						<p:resetInput target="pnlDbaToolsNovo" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgDbaToolsExcluir" closable="false"
+			draggable="false" resizable="false" header="Link Default - Excluir"
+			modal="true" appendTo="@(body) ">
+
+			<h:form id="frmDbaToolsExcluir">
+				<h:panelGrid id="pnlDbaToolsExcluir" columns="2">
+
+					<h:outputLabel value="Código: " />
+					<h:outputText value="#{MBLinkDefault.linkDefault.cod_link_default}" />
+
+					<h:outputLabel value="Nome da Instalação: " />
+					<h:outputText value="#{MBLinkDefault.linkDefault.descricao_link_default}" />
+
+					<h:outputLabel value="Link: " />
+					<h:outputText value="#{MBLinkDefault.linkDefault.link_default}" />
+
+
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBLinkDefault.excluir}"
+						update=":msgGlobal :frmDbaToolsListagem:tblDbaToolsListagem"
+						oncomplete="PF('dlgDbaToolsExcluir').hide(); tabelaDbaToolsListagem.clearFilters();" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgDbaToolsExcluir').hide();" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgDbaToolsEditar" closable="false" draggable="false"
+			resizable="false" header="Link Default - Editar " modal="true"
+			appendTo="@(body) ">
+			<h:form id="frmDbaToolsEditar">
+				<h:panelGrid id="pnlDbaToolsEditar" columns="2">
+
+
+					<p:outputLabel value="Codigo: " />
+					<h:outputText value="#{MBLinkDefault.linkDefault.cod_link_default}" />
+
+					<p:outputLabel for="txtNomeProdEditar" value="Descrição Link" />
+					<h:inputText id="txtNomeProdEditar"
+						value="#{MBLinkDefault.linkDefault.descricao_link_default}" size="30" maxlength="50"
+						required="true" requiredMessage="O campo Descrição Link é obrigatório. " />
+
+
+					<p:outputLabel for="txtlink_defaultProdEditar" value="Link" />
+					<h:inputText id="txtlink_defaultProdEditar"
+						value="#{MBLinkDefault.linkDefault.link_default}" size="100" maxlength="900"
+						required="true" requiredMessage="O campo link_default é obrigatório. " />
+
+
+
+
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Editar"
+						actionListener="#{MBLinkDefault.editar}"
+						update=":msgGlobal :frmDbaToolsListagem:tblDbaToolsListagem"
+						oncomplete="verificar(xhr, status, args, 'dlgDbaToolsEditar', 'tabelaDbaToolsListagem');" />
+					<p:commandButton value="Cancelar" process="@this"
+						oncomplete="PF('dlgDbaToolsEditar').hide();">
+						<p:resetInput target="pnlDbaToolsEditar" />
+					</p:commandButton>
+
+
+				</h:panelGrid>
+
+
+			</h:form>
+
+
+		</p:dialog>
+
+
+
+			<p:dialog widgetVar="dlgUserVisualizar" closable="false" draggable="false"
+			resizable="false" header="Link Cadastro- Visualizar "
+			modal="true" appendTo="@(body) ">
+			<h:form id="frmUserVisualizar">
+				<h:panelGrid id="pnlUserVisualizar" columns="2">
+
+
+					<p:outputLabel value="Codigo: " />
+					<h:outputText value="#{MBLinkDefault.linkDefault.cod_link_default}" />
+
+					<p:outputLabel for="txtNomeProdEditar" value="Descrição Link" />
+					<h:inputText id="txtNomeProdEditar"
+						value="#{MBLinkDefault.linkDefault.descricao_link_default}" size="30" maxlength="50"
+						required="true" requiredMessage="O campo Descrição Link é obrigatório. " />
+
+
+					<p:outputLabel for="txtlink_defaultProdEditar" value="Link" />
+					<h:inputText id="txtlink_defaultProdEditar"
+						value="#{MBLinkDefault.linkDefault.link_default}" size="100" maxlength="900"
+						required="true" requiredMessage="O campo link_default é obrigatório. " />
+
+			
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Fechar" process="@this"
+						oncomplete="PF('dlgUserVisualizar').hide();">
+						<p:resetInput target="pnlUserVisualizar" />
+					</p:commandButton>
+
+				</h:panelGrid>
+			</h:form>
+
+
+		</p:dialog>
+
+
+
+	</ui:define>
+
+</ui:composition>
