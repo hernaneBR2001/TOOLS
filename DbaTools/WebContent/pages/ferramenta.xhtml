@@ -163,16 +163,6 @@
 				</h:panelGrid>
 				<h:panelGrid columns="2">
 
-					<p:commandButton value="Editar"
-						actionListener="#{MBFerramenta.editar}"
-						update=":msgGlobal :frmUserListagem:tblUserListagem"
-						oncomplete="verificar(xhr, status, args, 'dlgUserEditar', 'tabelaUserListagem');" />
-					<p:commandButton value="Cancelar" process="@this"
-						oncomplete="PF('dlgUserEditar').hide();">
-						<p:resetInput target="pnlUserEditar" />
-					</p:commandButton>
-
-
 				</h:panelGrid>
 
 

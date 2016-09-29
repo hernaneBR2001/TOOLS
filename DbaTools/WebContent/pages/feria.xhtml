@@ -246,7 +246,7 @@
 
 					<p:outputLabel for="txtqtddiaProdEditar" value="Qtd Dia: " />
 					<p:selectOneMenu id="txtqtddiaProdEditar"
-						value="#{MBFeria.feria.qtidade_dias.qtd_dias}"
+			     		value="#{MBFeria.feria.qtidade_dias.qtidade_dias}"
 						filter="true" required="true"
 						requiredMessage="O campo Qtd Dia é obrigatório. ">
 						<f:selectItem itemValue="" itemLabel="Selecione Quantidade Dia" />
@@ -256,13 +256,15 @@
 					</p:selectOneMenu>
 
 
+
 					<p:outputLabel for="txtversao_soProdEditar" value="Data Inicio" />
 					<h:inputText id="txtversao_soProdEditar"
 						value="#{MBFeria.feria.data_inicio}" size="30"
 						maxlength="50" required="true"
 						requiredMessage="O campo Data Inicio é obrigatório. " />
 
-					<p:outputLabel for="txtSubstituto1ProdEditar" value="Substituto1: " />
+
+<p:outputLabel for="txtSubstituto1ProdEditar" value="Substituto1: " />
 					<p:selectOneMenu id="txtSubstituto1ProdEditar"
 						value="#{MBFeria.feria.substituto1.cod_usuario}"
 						filter="true" required="true"
@@ -295,6 +297,8 @@
 							var="item" itemValue="#{item.cod_usuario}"
 							itemLabel="#{item.nom_usuario}" />
 					</p:selectOneMenu>
+
+
 
 
 				</h:panelGrid>

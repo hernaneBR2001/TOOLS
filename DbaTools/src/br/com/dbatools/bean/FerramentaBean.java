@@ -1,5 +1,6 @@
 package br.com.dbatools.bean;
 
+import java.io.Console;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -183,6 +184,107 @@ public class FerramentaBean {
 	}
 	
 	public void prepararEditar(String comando){
+		System.out.println(comando.indexOf('|'));
+		
+	
+		if (comando.indexOf('|') > 0 ) {
+			
+		
+		String[] particao = new String[2];
+		particao[0] = comando.substring(0,comando.indexOf('|'));
+		particao[1] = comando.substring(comando.indexOf('|')+1,comando.length());
+	    
+
+		System.out.println("part1: " + particao[0]);
+		System.out.println("part2: " + particao[1]);
+		
+		String comando1 = particao[0];
+		String comando2 = particao[1];
+		
+	    
+	    
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		
+		DBAToolsConnector connector = null;
+		String user = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
+		
+		
+		HostClientDAO hostDAO = new HostClientDAO();
+		HostClient hc = hostDAO.getLastLogon(user, request.getRemoteAddr());
+		
+		if (hc != null){
+			System.out.println("host: " + hc.getHost() + " port: " + hc.getPort());
+			connector = new DBAToolsConnector(hc.getHost(),hc.getPort());
+		}
+		else{
+			connector = new DBAToolsConnector(request.getRemoteAddr(),9090);
+		}
+		
+		
+		System.out.println("comando1: " +comando1);
+		System.out.println("comando2: " +comando2);
+		 
+		String[] commands = new String[2];
+		commands[0] = comando1.substring(0,comando1.indexOf(';'));
+		commands[1] = comando1.substring(comando1.indexOf(';')+1,comando1.length());
+		
+		System.out.println("comando[1]: " +commands[0]);
+		System.out.println("comando[2]: " +commands[1]);
+		
+		
+		connector.sendCommand(commands[0], commands[1]);
+		
+
+		String[] commands2 = new String[2];
+		commands2[0] = comando2.substring(0,comando2.indexOf(';'));
+		commands2[1] = comando2.substring(comando2.indexOf(';')+1,comando2.length());
+
+		
+		System.out.println("comando2[1]: " +commands2[0]);
+		System.out.println("comando2[2]: " +commands2[1]);
+	
+		
+		connector.sendCommand(commands2[0], commands2[1]);
+		}
+		
+		
+		else {
+			
+			
+			HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			System.out.println(comando);
+			DBAToolsConnector connector = null;
+			String user = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
+			
+			
+			HostClientDAO hostDAO = new HostClientDAO();
+			HostClient hc = hostDAO.getLastLogon(user, request.getRemoteAddr());
+			
+			if (hc != null){
+				System.out.println("host: " + hc.getHost() + " port: " + hc.getPort());
+				connector = new DBAToolsConnector(hc.getHost(),hc.getPort());
+			}
+			else{
+				connector = new DBAToolsConnector(request.getRemoteAddr(),9090);
+			}
+			
+			 
+			
+			String[] commands = new String[2];
+			commands[0] = comando.substring(0,comando.indexOf(';'));
+			commands[1] = comando.substring(comando.indexOf(';')+1,comando.length());
+			System.out.println(commands[0]);
+			System.out.println(commands[1]);
+			
+			connector.sendCommand(commands[0], commands[1]);
+		
+			
+		}
+		
+	}
+
+
+	public void prepararComando(String comando){
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		System.out.println(comando);
 		DBAToolsConnector connector = null;
@@ -207,10 +309,25 @@ public class FerramentaBean {
 		commands[1] = comando.substring(comando.indexOf(';')+1,comando.length());
 		System.out.println(commands[0]);
 		System.out.println(commands[1]);
+		
 		connector.sendCommand(commands[0], commands[1]);
+		
+			
+		
 	}
+	
+	public static void main(String[] args) {
+		
+		String comando = "aaaa|bbbb";
 
-
-
+		
+		String[] particao = new String[2];
+		particao[0] = comando.substring(0,comando.indexOf('|'));
+		particao[1] = comando.substring(comando.indexOf('|')+1,comando.length());
+        
+		System.out.println("part1: " + particao[0]);
+		System.out.println("part2: " + particao[1]);
+		
+	}
 	
 }

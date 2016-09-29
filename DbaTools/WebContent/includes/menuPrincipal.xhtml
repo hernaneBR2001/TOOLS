@@ -9,7 +9,8 @@
       <h:form>
           <p:menubar>
          
-          <p:submenu label="Administrador">
+         
+           <p:submenu label="Administrador">
 <p:menuitem value="Empresa" outcome="/pages/empresa.xhtml"/>
 <p:menuitem value="Perfil" outcome="/pages/perfil.xhtml"/>
 <p:menuitem value="Usuario" outcome="/pages/usuarioadmin.xhtml"/>
@@ -31,9 +32,6 @@
 <p:menuitem value="Sair" actionListener="#{userLoginView.logout}" />
 </p:submenu>
          
-         
-  
-
              <p:submenu label="Operação">
                <p:menuitem value="CMDB - Algar Telecom" outcome="/pages/cmdbpostgres.xhtml"/>
                <p:menuitem value="Ferramenta" outcome="/pages/ferramenta.xhtml"/>
@@ -50,7 +48,6 @@
                <p:menuitem value="Sair" actionListener="#{userLoginView.logout}" />
              </p:submenu>
          
-
          <p:submenu label="Operação CA">
 <p:menuitem value="CMDB - Algar Telecom" outcome="/pages/cmdbpostgres.xhtml"/>
 <p:menuitem value="Ferramenta" outcome="/pages/ferramenta.xhtml"/>
@@ -62,6 +59,7 @@
 <p:menuitem value="Contato" outcome="/pages/contato.xhtml"/>
 <p:menuitem value="Sair" actionListener="#{userLoginView.logout}" />
 </p:submenu>
+
          
           </p:menubar>
       </h:form>
