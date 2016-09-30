@@ -40,6 +40,8 @@
 				</p:column>
 
 
+            
+
 					<p:column headerText="Data Inicio" sortBy="#{item.data_inicio}"
 					filterBy="#{item.data_inicio}">
 					<h:outputText value="#{item.data_inicio}" />
@@ -118,11 +120,10 @@
 					</p:selectOneMenu>
 
 
-					<p:outputLabel for="txtdataEmpNovo" value="Data Inicio: " />
+     	<p:outputLabel for="txtdataEmpNovo" value="Data Inicio: " />
 					<p:inputText id="txtdataEmpNovo" size="30" maxlength="50"
 						value="#{MBFeria.feria.data_inicio}" pattern="dd/MM/yyyy"
 						required="true" requiredMessage="O campo Data Inicio é obrigatório. " />
-
 
 
 	
@@ -246,7 +247,7 @@
 
 					<p:outputLabel for="txtqtddiaProdEditar" value="Qtd Dia: " />
 					<p:selectOneMenu id="txtqtddiaProdEditar"
-			     		value="#{MBFeria.feria.qtidade_dias.qtidade_dias}"
+			     		value="#{MBFeria.feria.qtidade_dias.qtd_dias}"
 						filter="true" required="true"
 						requiredMessage="O campo Qtd Dia é obrigatório. ">
 						<f:selectItem itemValue="" itemLabel="Selecione Quantidade Dia" />

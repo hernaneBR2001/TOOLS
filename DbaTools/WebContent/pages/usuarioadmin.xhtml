@@ -125,7 +125,7 @@
 					<p:outputLabel for="txtTelefoneEmpNovo" value="Telfone: " />
 					<p:inputMask id="txtTelefoneEmpNovo" size="30" maxlength="50"
 						value="#{MBUsuarioAdmin.usuarioAdmin.telefone}" required="true"
-						requiredMessage="O campo telefone  é obrigatório. " mask="(99)9999-9999"/>
+						requiredMessage="O campo telefone  é obrigatório. " mask="(99)99999-9999"/>
 
 
 					<p:outputLabel for="txtEamilEmpNovo" value="Email: " />
@@ -255,7 +255,7 @@
 					<p:outputLabel for="txtTelefoneProdEditar" value="Telefone" />
 					<h:inputText id="txtTelefoneProdEditar"
 						value="#{MBUsuarioAdmin.usuarioAdmin.telefone}" size="30" maxlength="50"
-						required="true" requiredMessage="O campo telefone é obrigatório. "/>
+						required="true" requiredMessage="O campo telefone é obrigatório. " mask="(99)99999-9999"/>
 
 					<p:outputLabel for="txtEmailProdEditar" value="Email" />
 					<h:inputText id="txtEmailProdEditar"

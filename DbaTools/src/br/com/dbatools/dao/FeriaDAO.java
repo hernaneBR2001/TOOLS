@@ -23,9 +23,8 @@ public class FeriaDAO {
 	
 	public void salvar(Feria p,String user) throws SQLException {
 		int i = 1;
-		DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 		
+
 		StringBuilder sql = new StringBuilder();
 		sql.append("INSERT INTO tb_planilha_ferias ");
 		sql.append(" (cod_planilha_ferias,cod_usuario,qtidade_dias,data_inicio,substituto1,substituto2,substituto3,data_fim) ");
@@ -35,21 +34,11 @@ public class FeriaDAO {
 
 		PreparedStatement comando = conexao.prepareStatement(sql.toString());
 		comando.setString(i++, user);
-        //comando.setLong(1, p.getCod_usuario().getCod_usuario());	
         comando.setLong(2, p.getQtidade_dias().getQtd_dias());
-        
-        System.out.println(p.getData_inicio());
-       // System.out.println(format.format(p.getData_inicio()));
-      
         comando.setString(3, p.getData_inicio());
-        
-        
         comando.setLong(4, p.getSubstituto1().getCod_usuario());
         comando.setLong(5, p.getSubstituto2().getCod_usuario());
         comando.setLong(6, p.getSubstituto3().getCod_usuario());
-
-        System.out.println(p.getQtidade_dias().getQtd_dias());
-        
         comando.setString(7,p.getData_inicio());
         comando.setLong(8, p.getQtidade_dias().getQtd_dias());
         
