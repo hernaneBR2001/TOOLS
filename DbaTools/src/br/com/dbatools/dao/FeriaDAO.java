@@ -5,26 +5,29 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
-import br.com.dbatools.domain.Empresa;
-import br.com.dbatools.domain.InstalacaoConfig;
-import br.com.dbatools.domain.Perfil;
-import br.com.dbatools.domain.QtdDia;
-import br.com.dbatools.domain.TipoConfig;
-import br.com.dbatools.domain.Usuario;
 import br.com.dbatools.domain.Feria;
-import br.com.dbatools.domain.Cmdb;
+import br.com.dbatools.domain.QtdDia;
+import br.com.dbatools.domain.Usuario;
 import br.com.dbatools.factory.ConexaoFactory;
 
 public class FeriaDAO {
 	
-	public void salvar(Feria p,String user) throws SQLException {
+	private DateFormat inputFormat = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy",Locale.US);
+    private DateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
+
+	
+	public void salvar(Feria p,String user) throws SQLException, ParseException {
 		int i = 1;
 		
-
+		
+        Date date = inputFormat.parse(p.getData_inicio());        
+	    
 		StringBuilder sql = new StringBuilder();
 		sql.append("INSERT INTO tb_planilha_ferias ");
 		sql.append(" (cod_planilha_ferias,cod_usuario,qtidade_dias,data_inicio,substituto1,substituto2,substituto3,data_fim) ");
@@ -35,15 +38,16 @@ public class FeriaDAO {
 		PreparedStatement comando = conexao.prepareStatement(sql.toString());
 		comando.setString(i++, user);
         comando.setLong(2, p.getQtidade_dias().getQtd_dias());
-        comando.setString(3, p.getData_inicio());
+        //comando.setString(3, p.getData_inicio());
+        comando.setString(3, outputFormat.format(date));
         comando.setLong(4, p.getSubstituto1().getCod_usuario());
         comando.setLong(5, p.getSubstituto2().getCod_usuario());
         comando.setLong(6, p.getSubstituto3().getCod_usuario());
-        comando.setString(7,p.getData_inicio());
+        //comando.setString(7,p.getData_inicio());
+        comando.setString(7,outputFormat.format(date));
         comando.setLong(8, p.getQtidade_dias().getQtd_dias());
-        
-        
-	   comando.executeUpdate();
+        		
+	   comando.executeUpdate();	   
 
 	}
 	
@@ -156,11 +160,14 @@ public class FeriaDAO {
 
 	}
 
-    public void editar(Feria p,String user) throws SQLException {
+    public void editar(Feria p,String user) throws SQLException, ParseException {
+    	
+    Date date = inputFormat.parse(p.getData_inicio()); 
+    
 	StringBuilder sql = new StringBuilder();
 	int i = 1;
 	sql.append("UPDATE tb_planilha_ferias ");
-	sql.append("set cod_usuario = (select cod_usuario from tb_usuario where usuario = ? ), qtidade_dias = ?, data_inicio = ?, substituto1 = ?, substituto2 = ?, substituto3 = ?, data_fim = (to_date(?,'DD/MM/YYYY') + ?)  ");
+	sql.append("set cod_usuario = (select cod_usuario from tb_usuario where usuario = ? ), qtidade_dias = ?, data_inicio = (to_date(?,'DD/MM/YYYY'), substituto1 = ?, substituto2 = ?, substituto3 = ?, data_fim = (to_date(?,'DD/MM/YYYY') + ?)  ");
 	sql.append("WHERE ");
 	sql.append("cod_planilha_ferias = ? ");
 	sql.append("and cod_usuario =  (select cod_usuario from tb_usuario where usuario = ? ) ");
@@ -171,7 +178,7 @@ public class FeriaDAO {
 	comando.setString(1, user);
     //comando.setLong(1, p.getCod_usuario().getCod_usuario());
     comando.setLong(2, p.getQtidade_dias().getQtd_dias());
-    comando.setString(3, p.getData_inicio());
+    comando.setString(3,p.getData_inicio());
     comando.setLong(4, p.getSubstituto1().getCod_usuario());
     comando.setLong(5, p.getSubstituto2().getCod_usuario());
     comando.setLong(6, p.getSubstituto3().getCod_usuario());
@@ -186,6 +193,7 @@ public class FeriaDAO {
 	comando.executeUpdate();
 
 }
-	
+    
+   
 
 }

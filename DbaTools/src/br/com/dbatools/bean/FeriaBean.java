@@ -1,6 +1,7 @@
 package br.com.dbatools.bean;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.faces.bean.ManagedBean;
@@ -113,7 +114,7 @@ public class FeriaBean {
 
 	}
 	
-	public void novo() {
+	public void novo()  {
 		try{
 
 			String user = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
@@ -130,6 +131,9 @@ public class FeriaBean {
 		}catch (SQLException ex) {
 			ex.printStackTrace();
 			JSFUtil.adicionarMensagemErro(ex.getMessage());
+		}catch (ParseException pe) {
+			pe.printStackTrace();
+			JSFUtil.adicionarMensagemErro(pe.getMessage());
 		}
 	}
 	
@@ -172,7 +176,7 @@ public class FeriaBean {
 	}
 	
 	
-	public void editar() {
+	public void editar() throws ParseException {
 		try{
 			
 			String user = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");

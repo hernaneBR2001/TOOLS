@@ -81,7 +81,7 @@
 					</p:commandButton>
 
 
-					<p:commandButton icon="ui-icon-pencil"
+					<p:commandButton icon="ui-icon-search"
 						actionListener="#{MBFeria.prepararEditar}"
 						oncomplete="PF('dlgUserEditar').show();"
 						update=":frmUserEditar:pnlUserEditar :msgGlobal">
@@ -121,7 +121,7 @@
 
 
      	<p:outputLabel for="txtdataEmpNovo" value="Data Inicio: " />
-					<p:inputText id="txtdataEmpNovo" size="30" maxlength="50"
+					<p:calendar id="txtdataEmpNovo" size="30" maxlength="50"
 						value="#{MBFeria.feria.data_inicio}" pattern="dd/MM/yyyy"
 						required="true" requiredMessage="O campo Data Inicio é obrigatório. " />
 
@@ -239,78 +239,38 @@
 				<h:panelGrid id="pnlUserEditar" columns="2">
 
 
-					<p:outputLabel value="Codigo: " />
+					<h:outputLabel value="Solicitação: " />
 					<h:outputText
-						value="#{MBFeria.feria.cod_planilha_ferias}" />
+						value="#{MBFeria.feria.cod_usuario.nom_usuario}" />
+
+					<h:outputLabel value="Quantidade de Dias: " />
+					<h:outputText value="#{MBFeria.feria.qtidade_dias.qtidade_dias}" />
+
+					<h:outputLabel value="Data Inicio: " />
+					<h:outputText value="#{MBFeria.feria.data_inicio}" />
+
+					<h:outputLabel value="Data Fim: " />
+					<h:outputText value="#{MBFeria.feria.data_fim}" />
+						
+						
+					<h:outputLabel value="Substituto1: " />
+					<h:outputText
+						value="#{MBFeria.feria.substituto1.nom_usuario}" />
+
+					<h:outputLabel value="Substituto2: " />
+					<h:outputText
+						value="#{MBFeria.feria.substituto2.nom_usuario}" />
+
+					<h:outputLabel value="Substituo3: " />
+					<h:outputText
+						value="#{MBFeria.feria.substituto3.nom_usuario}" />
 
 	
-
-					<p:outputLabel for="txtqtddiaProdEditar" value="Qtd Dia: " />
-					<p:selectOneMenu id="txtqtddiaProdEditar"
-			     		value="#{MBFeria.feria.qtidade_dias.qtd_dias}"
-						filter="true" required="true"
-						requiredMessage="O campo Qtd Dia é obrigatório. ">
-						<f:selectItem itemValue="" itemLabel="Selecione Quantidade Dia" />
-						<f:selectItems value="#{MBFeria.comboQtdDias}"
-							var="item" itemValue="#{item.qtd_dias}"
-							itemLabel="#{item.qtd_dias}" />
-					</p:selectOneMenu>
-
-
-
-					<p:outputLabel for="txtversao_soProdEditar" value="Data Inicio" />
-					<h:inputText id="txtversao_soProdEditar"
-						value="#{MBFeria.feria.data_inicio}" size="30"
-						maxlength="50" required="true"
-						requiredMessage="O campo Data Inicio é obrigatório. " />
-
-
-<p:outputLabel for="txtSubstituto1ProdEditar" value="Substituto1: " />
-					<p:selectOneMenu id="txtSubstituto1ProdEditar"
-						value="#{MBFeria.feria.substituto1.cod_usuario}"
-						filter="true" required="true"
-						requiredMessage="O campo Substituto1 é obrigatório. ">
-						<f:selectItem itemValue="" itemLabel="Selecione um Substituto1" />
-						<f:selectItems value="#{MBFeria.comboUsuarios}"
-							var="item" itemValue="#{item.cod_usuario}"
-							itemLabel="#{item.nom_usuario}" />
-					</p:selectOneMenu>
-
-
-					<p:outputLabel for="txtSubstituto2ProdEditar" value="Substituto2: " />
-					<p:selectOneMenu id="txtSubstituto2ProdEditar"
-						value="#{MBFeria.feria.substituto2.cod_usuario}"
-						filter="true" required="false"
-						requiredMessage="O campo Substituto2 é obrigatório. ">
-						<f:selectItem itemValue="" itemLabel="Selecione um Substituto2" />
-						<f:selectItems value="#{MBFeria.comboUsuarios}"
-							var="item" itemValue="#{item.cod_usuario}"
-							itemLabel="#{item.nom_usuario}" />
-					</p:selectOneMenu>
-
-					<p:outputLabel for="txtSubstituto3ProdEditar" value="Substituto3: " />
-					<p:selectOneMenu id="txtSubstituto3ProdEditar"
-						value="#{MBFeria.feria.substituto3.cod_usuario}"
-						filter="true" required="false"
-						requiredMessage="O campo Substituto3 é obrigatório. ">
-						<f:selectItem itemValue="" itemLabel="Selecione um Substituto3" />
-						<f:selectItems value="#{MBFeria.comboUsuarios}"
-							var="item" itemValue="#{item.cod_usuario}"
-							itemLabel="#{item.nom_usuario}" />
-					</p:selectOneMenu>
-
-
-
-
 				</h:panelGrid>
 				<h:panelGrid columns="2">
 
-					<p:commandButton value="Editar"
-						actionListener="#{MBFeria.editar}"
-						update=":msgGlobal :frmUserListagem:tblUserListagem"
-						oncomplete="verificar(xhr, status, args, 'dlgUserEditar', 'tabelaUserListagem');" />
-
-					<p:commandButton value="Cancelar" process="@this"
+					
+					<p:commandButton value="Fechar" process="@this"
 						oncomplete="PF('dlgUserEditar').hide();">
 						<p:resetInput target="pnlUserEditar" />
 					</p:commandButton>
