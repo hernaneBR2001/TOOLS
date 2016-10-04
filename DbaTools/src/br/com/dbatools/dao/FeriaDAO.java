@@ -54,48 +54,30 @@ public class FeriaDAO {
 	public ArrayList<Feria> listar(String user, String computador) throws SQLException {
 		StringBuilder sql = new StringBuilder();
 		int i = 1;
-		sql.append(" select ");
-		sql.append(" s.cod_planilha_ferias,  ");
 		
-		
-        sql.append(" substr(u.nom_usuario,1,instr(u.nom_usuario,' ')-1)||' '|| ");
-        sql.append(" substr(u.nom_usuario, instr(u.nom_usuario, ' ') + 1, instr(substr(u.nom_usuario, instr(u.nom_usuario, ' ') + 1, length(u.nom_usuario)), ' ') - 1) ");
-        sql.append(" nom_usuario, ");
-
-		
-		sql.append(" s.cod_usuario, ");
-		sql.append(" s.substituto1, ");
-		sql.append(" s.substituto2, ");
-		sql.append(" s.substituto3, ");
-		
-		sql.append("  (select ");
-		sql.append("  substr(z.nom_usuario,1,instr(z.nom_usuario,' ')-1)||' '||substr(z.nom_usuario, instr(z.nom_usuario, ' ') + 1, instr(substr(z.nom_usuario, instr(z.nom_usuario, ' ') + 1, length(z.nom_usuario)), ' ') - 1)  ");
-		sql.append("from tb_usuario z where z.cod_usuario = s.substituto1) NOM_SUBSTITUTO1,  ");
-
-		sql.append("  (select  ");
-		sql.append("  substr(z.nom_usuario,1,instr(z.nom_usuario,' ')-1)||' '||substr(z.nom_usuario, instr(z.nom_usuario, ' ') + 1, instr(substr(z.nom_usuario, instr(z.nom_usuario, ' ') + 1, length(z.nom_usuario)), ' ') - 1)  ");
-		sql.append("from tb_usuario z where z.cod_usuario = s.substituto2) NOM_SUBSTITUTO2,  ");
-
-		sql.append("  (select  ");
-		sql.append("  substr(z.nom_usuario,1,instr(z.nom_usuario,' ')-1)||' '||substr(z.nom_usuario, instr(z.nom_usuario, ' ') + 1, instr(substr(z.nom_usuario, instr(z.nom_usuario, ' ') + 1, length(z.nom_usuario)), ' ') - 1)  ");
-		sql.append("from tb_usuario z where z.cod_usuario = s.substituto3) NOM_SUBSTITUTO3,  ");
-
-		
-		
-		sql.append(" d.qtd_dias qtidade_dias, ");
-		sql.append(" to_char(s.data_inicio,'DD/MM/YYYY') data_inicio, ");
-		sql.append(" to_char(s.data_fim,'DD/MM/YYYY') data_fim ");
- 		sql.append(" from tb_planilha_ferias s, tb_usuario u, tb_qtd_dias d ");
- 		sql.append(" where ");
- 		sql.append(" s.cod_usuario = u.cod_usuario ");
- 		sql.append(" and s.qtidade_dias = d.qtd_dias ");
- 		sql.append(" and u.cod_empresa = (select cod_empresa from tb_usuario where usuario = ? ) ");
-
-
+		sql.append (" select a.cod_planilha_ferias, ");  
+		sql.append (" a.nom_usuario, ");  
+		sql.append (" a.cod_usuario, ");  
+		sql.append (" a.substituto1, ");  
+		sql.append (" a.substituto2, ");  
+		sql.append (" a.substituto3, ");  
+		sql.append (" a.NOM_SUBSTITUTO1, ");  
+		sql.append (" a.NOM_SUBSTITUTO2, ");  
+		sql.append (" a.NOM_SUBSTITUTO3, ");  
+		sql.append (" a.qtidade_dias, ");  
+		sql.append (" a.data_inicio, ");  
+		sql.append (" a.data_fim, ");  
+		sql.append (" a.cod_empresa, ");  
+		sql.append (" a.cod_perfil ");  
+		sql.append ("  from dbatools_adm.vw_ferias a ");  
+		sql.append(" where a.cod_empresa = (select cod_empresa from tb_usuario where usuario = ? ) ");
+		sql.append("  and a.cod_perfil = (select cod_perfil from tb_usuario where usuario = ? ) ");
+		 
 		Connection conexao = ConexaoFactory.conectar();
 
 		PreparedStatement comando = conexao.prepareStatement(sql.toString());
 		
+		comando.setString(i++, user);
 		comando.setString(i++, user);
 		
 		ResultSet resultado = comando.executeQuery();

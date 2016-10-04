@@ -27,47 +27,47 @@
 				</f:facet>
 
 
-	
-				<p:column headerText="Solicitante" filterBy="#{item.cod_usuario.cod_usuario}"
-					sortBy="#{item.cod_usuario.cod_usuario}">
+				<p:column headerText="Solicitante" filterBy="#{item.cod_usuario.nom_usuario}"
+					sortBy="#{item.cod_usuario.nom_usuario}">
 					<h:outputText value="#{item.cod_usuario.nom_usuario}" />
 				</p:column>
-
 
 				<p:column headerText="Quantidade Dias" filterBy="#{item.qtidade_dias.qtidade_dias}"
 					sortBy="#{item.qtidade_dias.qtidade_dias}">
 					<h:outputText value="#{item.qtidade_dias.qtidade_dias}" />
 				</p:column>
+ 
 
 
-            
-
-					<p:column headerText="Data Inicio" sortBy="#{item.data_inicio}"
+				<p:column headerText="Data Inicio" sortBy="#{item.data_inicio}"
 					filterBy="#{item.data_inicio}">
-					<h:outputText value="#{item.data_inicio}" />
+					<h:outputText value="#{item.data_inicio}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
 				</p:column>
-
-
-
+                     
+                 
 				<p:column headerText="Data Fim" sortBy="#{item.data_fim}"
 					filterBy="#{item.data_fim}">
-					<h:outputText value="#{item.data_fim}" />
+					<h:outputText value="#{item.data_fim}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
 				</p:column>
 				
 
-				<p:column headerText="Substituo1" filterBy="#{item.substituto1.cod_usuario}"
-					sortBy="#{item.substituto1.cod_usuario}">
+				<p:column headerText="Substituo1" filterBy="#{item.substituto1.nom_usuario}"
+					sortBy="#{item.substituto1.nom_usuario}">
 					<h:outputText value="#{item.substituto1.nom_usuario}" />
 				</p:column>
 
 
-				<p:column headerText="Substituo2" filterBy="#{item.substituto2.cod_usuario}"
-					sortBy="#{item.substituto2.cod_usuario}">
+				<p:column headerText="Substituo2" filterBy="#{item.substituto2.nom_usuario}"
+					sortBy="#{item.substituto2.nom_usuario}">
 					<h:outputText value="#{item.substituto2.nom_usuario}" />
 				</p:column>
 
-				<p:column headerText="Substituo3" filterBy="#{item.substituto3.cod_usuario}"
-					sortBy="#{item.substituto3.cod_usuario}">
+				<p:column headerText="Substituo3" filterBy="#{item.substituto3.nom_usuario}"
+					sortBy="#{item.substituto3.nom_usuario}">
 					<h:outputText value="#{item.substituto3.nom_usuario}" />
 				</p:column>
 
