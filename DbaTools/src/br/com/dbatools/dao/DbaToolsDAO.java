@@ -49,6 +49,7 @@ public class DbaToolsDAO {
 		sql.append("where");
 		sql.append(" a.cod_tipo = (select cod_tipo from tb_tipo_config where tipo = ? ) and  ");
 		sql.append(" a.cod_usuario =  (select cod_usuario from tb_usuario where usuario = ? )  ");
+		sql.append(" order by a.descricao ");
 
 		Connection conexao = ConexaoFactory.conectar();
 

@@ -18,18 +18,18 @@
  
     <p:dialog header="Login" widgetVar="dlg" resizable="false" visible="true"  >
         <h:panelGrid columns="2" cellpadding="5">
-            <h:outputLabel for="username" value="Username:" />
+            <h:outputLabel for="username" value="Usuário:" />
             <p:inputText id="username" value="#{userLoginView.username}" required="true" label="username" />
  
-            <h:outputLabel for="password" value="Password:" />
+            <h:outputLabel for="password" value="Senha:" />
             <p:password id="password" value="#{userLoginView.password}" required="true" label="password" />
  
-    <p:outputLabel for="console" value="Computador:" />
-        <p:selectOneMenu id="console" value="#{userLoginView.computador}" required="true" style="width:125px">
-            <f:selectItem itemLabel="Select One" itemValue="" />
-            <f:selectItem itemLabel="TERMINAL" itemValue="TERMINAL" />
+    <p:outputLabel for="console" value="Selecione uma opção" />
+        <p:selectOneMenu id="console" value="#{userLoginView.computador}" required="true" style="width:190px">
+            <f:selectItem itemLabel=" " itemValue="" />
             <f:selectItem itemLabel="EMPRESA" itemValue="EMPRESA" />
             <f:selectItem itemLabel="PESSOAL" itemValue="PESSOAL" />
+            <f:selectItem itemLabel="TERMINAL" itemValue="TERMINAL" />
         </p:selectOneMenu>
 
  
