@@ -13,7 +13,7 @@ import br.com.dbatools.factory.ConexaoFactory;
 
 public class FerramentaDAO {
 	
-	public ArrayList<Ferramenta> listar(String user, String computador, String servidor,String ip, String database, String usuario, String programa) throws SQLException {
+	public ArrayList<Ferramenta> listar(String user, String computador, String servidor,String ip, String database, String tipoambiente, String usuario, String programa) throws SQLException {
 		StringBuilder sql = new StringBuilder();
 		
 		
@@ -25,6 +25,10 @@ public class FerramentaDAO {
 		
 		if (database == null || database.isEmpty() )
 			 database="%";
+
+		if (tipoambiente == null || tipoambiente.isEmpty() )
+			 tipoambiente="%";
+		
 		
 		if (usuario == null || usuario.isEmpty() )
 			 usuario="%";
@@ -41,11 +45,12 @@ public class FerramentaDAO {
                 sql.append("    and A.usuario = ? ");
                 sql.append("    and upper(A.servidor) like upper(?) ");
                 sql.append("    and upper(A.ip) like upper(?) ");
-               	sql.append("    and upper(A.database) like upper(?) ");                
+               	sql.append("    and upper(A.database) like upper(?) ");
+               	sql.append("    and upper(A.tipo_ambiente) like upper(?) ");   
                	sql.append("    and upper(A.USUARIO_BD_APP) like UPPER (?) ");                
                	sql.append("    and upper(A.programa) like upper(?) ");
                 sql.append("    and rownum < 300 ");
-                
+                sql.append("    order by 1,2,3,4,5 ");
 
 		Connection conexao = ConexaoFactory.conectar();
 
@@ -56,16 +61,11 @@ public class FerramentaDAO {
         comando.setString(4, servidor);
 		comando.setString(5, ip);	
 		comando.setString(6, database);
-		comando.setString(7, usuario);
-		comando.setString(8, programa);
+		comando.setString(7, tipoambiente);
+		comando.setString(8, usuario);
+		comando.setString(9, programa);
 		
 					
-		
-		System.out.println(servidor);
-		System.out.println(ip);
-		System.out.println(database);
-		System.out.println(usuario);
-		System.out.println(programa);
 		
 		ResultSet resultado = comando.executeQuery();
 

@@ -13,7 +13,7 @@ import br.com.dbatools.factory.ConexaoFactory;
 
 public class FerramentaLdapDAO {
 	
-	public ArrayList<FerramentaLdap> listar(String user, String computador, String servidor,String ip, String database,  String programa) throws SQLException {
+	public ArrayList<FerramentaLdap> listar(String user, String computador, String servidor,String ip, String database, String tipoambiente, String programa) throws SQLException {
 		StringBuilder sql = new StringBuilder();
 
 		if (servidor == null || servidor.isEmpty() )
@@ -24,7 +24,11 @@ public class FerramentaLdapDAO {
 		
 		if (database == null || database.isEmpty() )
 			 database="%";
+	
 		
+		if (tipoambiente == null || tipoambiente.isEmpty() )
+			 tipoambiente="%";
+
 	
 		if (programa == null || programa.isEmpty() )
 			 programa="%";
@@ -38,10 +42,12 @@ public class FerramentaLdapDAO {
                 sql.append("  A.usuario = ?  ");      
                 sql.append("    and upper(A.servidor) like upper(?) ");
                 sql.append("    and upper(A.ip) like upper(?) ");
-               	sql.append("    and upper(A.database) like upper(?) ");                
+               	sql.append("    and upper(A.database) like upper(?) ");
+               	sql.append("    and upper(A.tipo_ambiente) like upper(?) ");
                	sql.append("    and upper(A.programa) like upper(?) ");
                	sql.append(" and a.cod_usuario = (select B.cod_usuario from tb_usuario B where B.usuario = ? )");
                 sql.append("    and rownum < 300 ");
+                sql.append("    order by 1,2,3,4,5 ");
 
                 
                 
@@ -57,8 +63,9 @@ public class FerramentaLdapDAO {
         comando.setString(4, servidor);
 		comando.setString(5, ip);	
 		comando.setString(6, database);
-		comando.setString(7, programa);
-		comando.setString(8, user);
+		comando.setString(7, tipoambiente);
+		comando.setString(8, programa);
+		comando.setString(9, user);
 		
 		
 		ResultSet resultado = comando.executeQuery();

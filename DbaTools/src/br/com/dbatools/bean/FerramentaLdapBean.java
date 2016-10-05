@@ -32,6 +32,7 @@ public class FerramentaLdapBean {
     private String databaseFilter;
     private String ipFilter;
     private String usuarioFilter;
+    private String tipoambienteFilter;
   
 
     public ArrayList<TipoConfig> getcomboTipoConfigs() {
@@ -94,6 +95,16 @@ public class FerramentaLdapBean {
 
 
 
+	public String getTipoambienteFilter() {
+		return tipoambienteFilter;
+	}
+
+
+	public void setTipoambienteFilter(String tipoambienteFilter) {
+		this.tipoambienteFilter = tipoambienteFilter;
+	}
+
+
 	public void carregarListagem() {
 		try {
 			String user = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
@@ -101,7 +112,7 @@ public class FerramentaLdapBean {
 
 			FerramentaLdapDAO dao = new FerramentaLdapDAO();
 		
-			itens = dao.listar(user,computador,servidorFilter,ipFilter,databaseFilter,programaFilter );
+			itens = dao.listar(user,computador,servidorFilter,ipFilter,databaseFilter,tipoambienteFilter,programaFilter );
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());

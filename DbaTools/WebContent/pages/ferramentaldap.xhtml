@@ -23,6 +23,11 @@
 			<h:outputLabel value="Database/Aplicação: "></h:outputLabel>
 			<h:inputText id="databaseFilter" value="#{MBFerramentaLdap.databaseFilter}"></h:inputText>			
 		
+		
+					<h:outputLabel value="Tipo Ambiente: "></h:outputLabel>
+			<h:inputText id="tipoambienteFilter" value="#{MBFerramentaLdap.tipoambienteFilter}"></h:inputText>&nbsp;
+		
+		
 			<h:outputLabel value=" Programa: "></h:outputLabel>
 			<h:inputText id="programaFilter" value="#{MBFerramentaLdap.programaFilter}"></h:inputText>
 
@@ -40,40 +45,31 @@
 
 
 						
-				<p:column headerText="Servidor"
-					filterBy="#{item.servidor}"
-					sortBy="#{item.servidor}">
+				<p:column headerText="Servidor"	>
 					<h:outputText value="#{item.servidor}" />
 				</p:column>
 				
 
-				<p:column headerText="IP"
-					filterBy="#{item.ip}"
-					sortBy="#{item.ip}">
+				<p:column headerText="IP">
 					<h:outputText value="#{item.ip}" />
 				</p:column>
 
 				
-				<p:column headerText="Database/Aplicação" sortBy="#{item.database}"
-					filterBy="#{item.database}">
+				<p:column headerText="Database/Aplicação" >
 					<h:outputText value="#{item.database}" />
 				</p:column>
 
-		<p:column headerText="Tipo Ambiente"
-					filterBy="#{item.tipo_ambiente}"
-					sortBy="#{item.tipo_ambiente}">
+		<p:column headerText="Tipo Ambiente">
 					<h:outputText value="#{item.tipo_ambiente}" />
 				</p:column>
 		
-				<p:column headerText="Programa"
-					filterBy="#{item.programa}"
-					sortBy="#{item.programa}">
+				<p:column headerText="Programa">
 					<h:outputText value="#{item.programa}" />
 				</p:column>
 
 
 
-				<p:column headerText="Aplicação">
+				<p:column headerText="Executar">
 				
 			
 					<p:commandButton icon="ui-icon-circle-triangle-e"

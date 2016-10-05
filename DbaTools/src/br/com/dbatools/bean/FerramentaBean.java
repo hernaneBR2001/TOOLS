@@ -30,6 +30,7 @@ public class FerramentaBean {
     private String databaseFilter;
     private String ipFilter;
     private String usuarioFilter;
+    private String tipoambienteFilter;
     
     
     private Ferramenta ferramenta;
@@ -148,12 +149,23 @@ public class FerramentaBean {
 	}
 		
 
+	
+	public String getTipoambienteFilter() {
+		return tipoambienteFilter;
+	}
+
+
+	public void setTipoambienteFilter(String tipoambienteFilter) {
+		this.tipoambienteFilter = tipoambienteFilter;
+	}
+
+
 	public void carregarListagem() {
 		String user = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
 		String computador = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("computador");
 		try {
 		FerramentaDAO dao = new FerramentaDAO();
-		itens = dao.listar(user,computador,servidorFilter,ipFilter,databaseFilter,usuarioFilter,programaFilter );
+		itens = dao.listar(user,computador,servidorFilter,ipFilter,databaseFilter,tipoambienteFilter,usuarioFilter,programaFilter );
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());
@@ -329,5 +341,7 @@ public class FerramentaBean {
 		System.out.println("part2: " + particao[1]);
 		
 	}
-	
+
+
+
 }
