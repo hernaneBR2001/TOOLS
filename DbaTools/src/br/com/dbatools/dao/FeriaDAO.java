@@ -72,7 +72,7 @@ public class FeriaDAO {
 		sql.append ("  from dbatools_adm.vw_ferias a ");  
 		sql.append(" where a.cod_empresa = (select cod_empresa from tb_usuario where usuario = ? ) ");
 		sql.append("  and a.cod_perfil = (select cod_perfil from tb_usuario where usuario = ? ) ");
-		sql.append("  order by to_date(a.data_inicio) , a.nom_usuario ");
+		sql.append("  order by to_date(a.data_inicio,'DD/MM/YYYY') , a.nom_usuario ");
 		 
 		Connection conexao = ConexaoFactory.conectar();
 
