@@ -11,6 +11,29 @@
          
 
     
+<p:submenu label="Administrador">
+<p:menuitem value="Empresa" outcome="/pages/empresa.xhtml"/>
+<p:menuitem value="Perfil" outcome="/pages/perfil.xhtml"/>
+<p:menuitem value="Usuario" outcome="/pages/usuarioadmin.xhtml"/>
+<p:menuitem value="Tipo Configuracao" outcome="/pages/tipoconfig.xhtml"/>
+<p:menuitem value="Instalação Configuracao" outcome="/pages/instalacaoconfig.xhtml"/>
+<p:menuitem value="Link Default" outcome="/pages/linkdefault.xhtml"/>
+<p:menuitem value="Quantidade Dias" outcome="/pages/qtddia.xhtml"/>
+<p:menuitem value="Sair" actionListener="#{userLoginView.logout}" />
+</p:submenu>
+
+<p:submenu label="Empresa">
+<p:menuitem value="Alterar Senha" outcome="/pages/usuarioperfil.xhtml"/>
+<p:menuitem value="CMDB - Empresa" outcome="/pages/cmdb.xhtml"/>
+<p:menuitem value="Credendial" outcome="/pages/credencialusuario.xhtml"/>
+<p:menuitem value="Ferramenta" outcome="/pages/ferramenta.xhtml"/>
+<p:menuitem value="FerramentaLdap" outcome="/pages/ferramentaldap.xhtml"/>
+<p:menuitem value="Link" outcome="/pages/linkcadastro.xhtml"/>
+<p:menuitem value="Senha Database/App" outcome="/pages/cadastrodbapp.xhtml"/>
+<p:menuitem value="Senha Servidor" outcome="/pages/cadastrodbappservidor.xhtml"/>
+<p:menuitem value="Sair" actionListener="#{userLoginView.logout}" />
+</p:submenu>
+         
              <p:submenu label="Operação">
                <p:menuitem value="Alterar Senha" outcome="/pages/usuarioperfil.xhtml"/>
                <p:menuitem value="Base Conhecimento" outcome="/pages/baseconhecimento.xhtml"/>
@@ -26,6 +49,19 @@
                <p:menuitem value="Senha Servidor" outcome="/pages/cadastrodbappservidor.xhtml"/>
                <p:menuitem value="Sair" actionListener="#{userLoginView.logout}" />
              </p:submenu>
+         
+<p:submenu label="Operação CA">
+<p:menuitem value="Alterar Senha" outcome="/pages/usuarioperfil.xhtml"/>
+<p:menuitem value="Base Conhecimento" outcome="/pages/baseconhecimento.xhtml"/>
+<p:menuitem value="Contato" outcome="/pages/contato.xhtml"/>
+<p:menuitem value="CMDB - Algar Telecom" outcome="/pages/cmdbpostgres.xhtml"/>
+<p:menuitem value="Credendial" outcome="/pages/credencialusuario.xhtml"/>
+<p:menuitem value="Ferramenta" outcome="/pages/ferramenta.xhtml"/>
+<p:menuitem value="FerramentaLdap" outcome="/pages/ferramentaldap.xhtml"/>
+<p:menuitem value="Link" outcome="/pages/linkcadastro.xhtml"/>
+<p:menuitem value="Sair" actionListener="#{userLoginView.logout}" />
+</p:submenu>
+
          
 
 
