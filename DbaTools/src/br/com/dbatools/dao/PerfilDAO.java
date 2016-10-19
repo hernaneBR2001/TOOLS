@@ -28,6 +28,7 @@ public class PerfilDAO {
 		
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 
@@ -43,6 +44,7 @@ public class PerfilDAO {
 		comando.setLong(1, f.getCod_perfil());
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 
@@ -60,6 +62,7 @@ public class PerfilDAO {
 		comando.setLong(2, f.getCod_perfil());
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 

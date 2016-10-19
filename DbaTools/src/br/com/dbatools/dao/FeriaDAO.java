@@ -47,7 +47,8 @@ public class FeriaDAO {
         comando.setString(7,outputFormat.format(date));
         comando.setLong(8, p.getQtidade_dias().getQtd_dias());
         		
-	   comando.executeUpdate();	   
+	   comando.executeUpdate();	 
+	   ConexaoFactory.fecharConexao();
 
 	}
 	
@@ -140,7 +141,7 @@ public class FeriaDAO {
 		comando.setString(2, user);
 		
 		comando.executeUpdate();
-
+		ConexaoFactory.fecharConexao();
 	}
 
     public void editar(Feria p,String user) throws SQLException, ParseException {
@@ -174,6 +175,7 @@ public class FeriaDAO {
     comando.setString(10, user);
     
 	comando.executeUpdate();
+	ConexaoFactory.fecharConexao();
 
 }
     

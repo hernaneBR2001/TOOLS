@@ -36,6 +36,7 @@ public class UsuarioPerfilDAO {
 		comando.setLong(8, p.getPerfil().getCod_perfil());
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 	
@@ -53,7 +54,7 @@ public class UsuarioPerfilDAO {
                 sql.append(" U.COD_PERFIL = P.COD_PERFIL and ");
                 sql.append(" U.COD_EMPRESA = (select cod_empresa from tb_usuario where usuario = ?) and ");
                 sql.append(" U.COD_USUARIO = (select cod_usuario from tb_usuario where usuario = ?)  ");
-
+                sql.append(" order by 2,3 ");
 		Connection conexao = ConexaoFactory.conectar();
 
 		PreparedStatement comando = conexao.prepareStatement(sql.toString());
@@ -108,6 +109,7 @@ public class UsuarioPerfilDAO {
 		comando.setLong(1, p.getCod_usuario());
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 
@@ -138,6 +140,7 @@ public class UsuarioPerfilDAO {
 	comando.setLong(10, p.getCod_usuario());
 	
 	comando.executeUpdate();
+	ConexaoFactory.fecharConexao();
 
 }
 	

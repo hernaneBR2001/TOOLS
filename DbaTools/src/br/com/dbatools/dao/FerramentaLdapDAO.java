@@ -35,7 +35,7 @@ public class FerramentaLdapDAO {
 
 		
 		int i = 1;
-                sql.append(" SELECT A.tipo,A.nom_usuario,A.servidor,A.ip,A.database,a.tipo_ambiente,A.usuario,A.programa,A.comando2 ");
+                sql.append(" SELECT A.tipo,A.nom_usuario,A.servidor,A.ip,A.database,a.versao,a.tipo_ambiente,A.usuario,A.programa,A.comando2 ");
                 sql.append(" FROM vw_ferramentas_ldap A ");
                 sql.append("  where A.cod_empresa = (select B.cod_empresa from tb_usuario B where B.usuario = ? ) AND "); 
                 sql.append("     A.tipo = (select C.cod_tipo from tb_tipo_config C where C.tipo = ? ) and  ");
@@ -80,6 +80,7 @@ public class FerramentaLdapDAO {
             u.setServidor(resultado.getString("servidor"));
             u.setIp(resultado.getString("ip"));
             u.setDatabase(resultado.getString("database"));
+            u.setVersao(resultado.getString("versao"));
             u.setTipo_ambiente(resultado.getString("tipo_ambiente"));
             u.setUsuario_bd_app(resultado.getString("usuario"));
             u.setPrograma(resultado.getString("programa"));

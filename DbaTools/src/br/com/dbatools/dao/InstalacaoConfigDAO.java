@@ -28,6 +28,7 @@ public class InstalacaoConfigDAO {
 		comando.setString(3, p.getComando());
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 	
@@ -36,7 +37,7 @@ public class InstalacaoConfigDAO {
 
                 sql.append(" SELECT cod_instalacao,nom_instalacao,caminho,comando ");
                 sql.append(" FROM tb_instalacao_config ");
-
+                sql.append(" order by 2,3,4 ");
 		Connection conexao = ConexaoFactory.conectar();
 
 		PreparedStatement comando = conexao.prepareStatement(sql.toString());
@@ -72,7 +73,8 @@ public class InstalacaoConfigDAO {
 		comando.setLong(1, p.getCod_instalacao());
 
 		comando.executeUpdate();
-
+		ConexaoFactory.fecharConexao();
+		
 	}
 
     public void editar(InstalacaoConfig p) throws SQLException {
@@ -93,6 +95,7 @@ public class InstalacaoConfigDAO {
 	comando.setLong(4, p.getCod_instalacao());
 	
 	comando.executeUpdate();
+	ConexaoFactory.fecharConexao();
 
 }
 	

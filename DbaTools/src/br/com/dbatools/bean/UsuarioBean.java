@@ -13,6 +13,7 @@ import br.com.dbatools.dao.UsuarioDAO;
 import br.com.dbatools.domain.Empresa;
 import br.com.dbatools.domain.Perfil;
 import br.com.dbatools.domain.Usuario;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.util.JSFUtil;
 
 @ManagedBean(name="MBUsuario")
@@ -91,7 +92,7 @@ public class UsuarioBean {
 			
 		UsuarioDAO dao = new UsuarioDAO();
 		itens = dao.listar(user,computador);
-		
+		ConexaoFactory.fecharConexao();
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());

@@ -12,6 +12,7 @@ import br.com.dbatools.dao.InstalacaoConfigDAO;
 import br.com.dbatools.dao.TipoConfigDAO;
 import br.com.dbatools.dao.FerramentaLdapDAO;
 import br.com.dbatools.domain.Usuario;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.domain.InstalacaoConfig;
 import br.com.dbatools.domain.TipoConfig;
 import br.com.dbatools.domain.FerramentaLdap;
@@ -113,6 +114,7 @@ public class FerramentaLdapBean {
 			FerramentaLdapDAO dao = new FerramentaLdapDAO();
 		
 			itens = dao.listar(user,computador,servidorFilter,ipFilter,databaseFilter,tipoambienteFilter,programaFilter );
+			ConexaoFactory.fecharConexao();
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());

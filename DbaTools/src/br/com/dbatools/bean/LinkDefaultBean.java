@@ -9,6 +9,7 @@ import javax.faces.bean.ViewScoped;
 import br.com.dbatools.dao.LinkDefaultDAO;
 import br.com.dbatools.domain.Empresa;
 import br.com.dbatools.domain.Perfil;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.domain.LinkDefault;
 import br.com.dbatools.util.JSFUtil;
 
@@ -84,6 +85,7 @@ public class LinkDefaultBean {
 		try {
 		LinkDefaultDAO dao = new LinkDefaultDAO();
 		itens = dao.listar();
+		ConexaoFactory.fecharConexao();
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());

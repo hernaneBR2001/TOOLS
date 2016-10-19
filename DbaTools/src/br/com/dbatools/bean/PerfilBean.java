@@ -9,6 +9,7 @@ import javax.faces.bean.ViewScoped;
 
 import br.com.dbatools.dao.PerfilDAO;
 import br.com.dbatools.domain.Perfil;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.util.JSFUtil;
 
 @ManagedBean(name = "MBPerfil")
@@ -52,6 +53,7 @@ public void setItensFiltrados(ArrayList<Perfil> itensFiltrados) {
 
 			PerfilDAO dao = new PerfilDAO();
 			itens = dao.listar();
+			ConexaoFactory.fecharConexao();
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
@@ -72,6 +74,7 @@ public void setItensFiltrados(ArrayList<Perfil> itensFiltrados) {
 			dao.salvar(perfil);
 
 			itens = dao.listar();
+			
 			
 			JSFUtil.adicionarMensagemSucesso("Perfil Salvo Com sucesso");
 		} catch (SQLException ex) {

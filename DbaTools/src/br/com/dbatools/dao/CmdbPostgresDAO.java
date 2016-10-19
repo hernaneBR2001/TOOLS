@@ -12,6 +12,7 @@ import br.com.dbatools.domain.Perfil;
 import br.com.dbatools.domain.TipoConfig;
 import br.com.dbatools.domain.Usuario;
 import br.com.dbatools.domain.CmdbPostgres;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.factory.ConexaoPostgres;
 
 public class CmdbPostgresDAO {
@@ -41,6 +42,7 @@ public class CmdbPostgresDAO {
         
         
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 	
@@ -50,7 +52,7 @@ public class CmdbPostgresDAO {
 
 		sql.append (" SELECT   *    ");
 		sql.append ("  FROM  view_cmdb_dba_tools  ");
-
+		sql.append(" order by 1,2,4,5 ");
 		Connection conexao = ConexaoPostgres.conectar();
 
 		PreparedStatement comando = conexao.prepareStatement(sql.toString());
@@ -94,6 +96,7 @@ public class CmdbPostgresDAO {
 		
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 
@@ -124,6 +127,7 @@ public class CmdbPostgresDAO {
     comando.setString(12, p.getDatabase());
 	
 	comando.executeUpdate();
+	ConexaoFactory.fecharConexao();
 
 }
 	

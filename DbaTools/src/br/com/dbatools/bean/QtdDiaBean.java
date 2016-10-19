@@ -12,6 +12,7 @@ import br.com.dbatools.dao.QtdDiaDAO;
 import br.com.dbatools.domain.Empresa;
 import br.com.dbatools.domain.Perfil;
 import br.com.dbatools.domain.QtdDia;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.util.JSFUtil;
 
 @ManagedBean(name="MBQtdDia")
@@ -86,6 +87,7 @@ public class QtdDiaBean {
 		try {
 		QtdDiaDAO dao = new QtdDiaDAO();
 		itens = dao.listar();
+		ConexaoFactory.fecharConexao();
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());

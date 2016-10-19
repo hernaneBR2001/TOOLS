@@ -28,6 +28,7 @@ public class QtdDiaDAO {
 
 		
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 	
@@ -71,6 +72,7 @@ public class QtdDiaDAO {
 		comando.setLong(1, p.getQtidade_dias());
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 
@@ -90,7 +92,8 @@ public class QtdDiaDAO {
 	comando.setLong(2, p.getQtidade_dias());
 	
 	comando.executeUpdate();
-
+	ConexaoFactory.fecharConexao();
+	
 }
 	
 

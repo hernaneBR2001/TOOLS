@@ -35,6 +35,7 @@ public class CredencialUsuarioDAO {
 		//comando.setLong(5, p.getTipoconfig().getCod_tipo());
 		comando.setString(5, computador);
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 	
@@ -52,8 +53,8 @@ public class CredencialUsuarioDAO {
                 sql.append(" b.cod_tipo = t.cod_tipo and ");
                 sql.append(" b.cod_usuario = (select cod_usuario from tb_usuario where usuario = ? ) and ");
                 sql.append(" b.cod_tipo = (select cod_tipo from tb_tipo_config where tipo = ? ) ");
-                sql.append(" order by t.cod_tipo ");
-
+                sql.append(" order by b.nom_instalacao,t.cod_tipo ");
+                
 
 		Connection conexao = ConexaoFactory.conectar();
 
@@ -109,6 +110,7 @@ public class CredencialUsuarioDAO {
 		comando.setLong(1, p.getCod_credencial());
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 
@@ -128,6 +130,7 @@ public class CredencialUsuarioDAO {
     comando.setLong(4, p.getCod_credencial());
 	
 	comando.executeUpdate();
+	ConexaoFactory.fecharConexao();
 
 }
 	

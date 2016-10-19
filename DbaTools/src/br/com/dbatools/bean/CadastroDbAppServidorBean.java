@@ -10,6 +10,7 @@ import javax.faces.context.FacesContext;
 import br.com.dbatools.dao.CmdbDAO;
 import br.com.dbatools.dao.CadastroDbAppServidorDAO;
 import br.com.dbatools.domain.Cmdb;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.domain.CadastroDbAppServidor;
 import br.com.dbatools.util.JSFUtil;
 
@@ -68,6 +69,7 @@ public class CadastroDbAppServidorBean {
 			
 		CadastroDbAppServidorDAO dao = new CadastroDbAppServidorDAO();
 		itens = dao.listar(user,computador);
+		ConexaoFactory.fecharConexao();
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());

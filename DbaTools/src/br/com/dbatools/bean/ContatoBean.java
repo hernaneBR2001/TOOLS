@@ -12,6 +12,7 @@ import br.com.dbatools.dao.PerfilDAO;
 import br.com.dbatools.dao.ContatoDAO;
 import br.com.dbatools.domain.Empresa;
 import br.com.dbatools.domain.Perfil;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.domain.Contato;
 import br.com.dbatools.util.JSFUtil;
 
@@ -91,7 +92,7 @@ public class ContatoBean {
 			
 		ContatoDAO dao = new ContatoDAO();
 		itens = dao.listar(user,computador);
-		
+		ConexaoFactory.fecharConexao();
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());

@@ -29,6 +29,7 @@ public class EmpresaDAO {
 		comando.setString(2, f.getCnpj());
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 
@@ -44,6 +45,7 @@ public class EmpresaDAO {
 		comando.setLong(1, f.getCod_empresa());
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 
@@ -63,6 +65,7 @@ public class EmpresaDAO {
 		comando.setLong(3, f.getCod_empresa());
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 
@@ -71,7 +74,7 @@ public class EmpresaDAO {
 		sql.append("select cod_empresa,nom_empresa,cnpj ");
 		sql.append("from TB_Empresa ");
 		sql.append("where cod_empresa = ? ");
-
+		sql.append(" order by 2,3 ");
 		Connection conexao = ConexaoFactory.conectar();
 
 		PreparedStatement comando = conexao.prepareStatement(sql.toString());

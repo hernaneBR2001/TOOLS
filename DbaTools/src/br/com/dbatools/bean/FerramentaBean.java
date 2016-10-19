@@ -4,6 +4,7 @@ import java.io.Console;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -18,6 +19,7 @@ import br.com.dbatools.domain.Ferramenta;
 import br.com.dbatools.domain.HostClient;
 import br.com.dbatools.domain.TipoConfig;
 import br.com.dbatools.domain.Usuario;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.util.JSFUtil;
 
 @ManagedBean(name="MBFerramenta")
@@ -166,6 +168,7 @@ public class FerramentaBean {
 		try {
 		FerramentaDAO dao = new FerramentaDAO();
 		itens = dao.listar(user,computador,servidorFilter,ipFilter,databaseFilter,tipoambienteFilter,usuarioFilter,programaFilter );
+		ConexaoFactory.fecharConexao();
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());
@@ -276,6 +279,7 @@ public class FerramentaBean {
 				System.out.println("host: " + hc.getHost() + " port: " + hc.getPort());
 				connector = new DBAToolsConnector(hc.getHost(),hc.getPort());
 			}
+
 			else{
 				connector = new DBAToolsConnector(request.getRemoteAddr(),9090);
 			}
@@ -289,6 +293,9 @@ public class FerramentaBean {
 			System.out.println(commands[1]);
 			
 			connector.sendCommand(commands[0], commands[1]);
+
+
+
 		
 			
 		}

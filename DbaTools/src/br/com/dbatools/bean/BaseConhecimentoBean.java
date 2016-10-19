@@ -11,6 +11,7 @@ import br.com.dbatools.dao.EmpresaDAO;
 import br.com.dbatools.dao.CmdbDAO;
 import br.com.dbatools.dao.BaseConhecimentoDAO;
 import br.com.dbatools.domain.Empresa;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.domain.Cmdb;
 import br.com.dbatools.domain.BaseConhecimento;
 import br.com.dbatools.util.JSFUtil;
@@ -78,6 +79,7 @@ public class BaseConhecimentoBean {
 		String computador = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("computador");
 
 		itens = dao.listar(user,computador);
+		ConexaoFactory.fecharConexao();
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());

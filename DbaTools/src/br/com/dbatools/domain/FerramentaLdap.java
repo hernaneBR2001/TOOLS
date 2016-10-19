@@ -10,6 +10,8 @@ public class FerramentaLdap {
 	private String programa;
 	private String comando2;
 	private String tipo_ambiente;
+	private String versao;
+	
 	
 	
 	public String getNom_usuario() {
@@ -65,6 +67,12 @@ public class FerramentaLdap {
 	}
 	public void setTipo_ambiente(String tipo_ambiente) {
 		this.tipo_ambiente = tipo_ambiente;
+	}
+	public String getVersao() {
+		return versao;
+	}
+	public void setVersao(String versao) {
+		this.versao = versao;
 	}
 		
 }

@@ -38,7 +38,7 @@ public class FerramentaDAO {
 		
 		
 		int i = 1;
-                sql.append(" SELECT DISTINCT A.tipo,A.cod_usuario,A.servidor,A.ip,A.database,a.tipo_ambiente,A.usuario_bd_app,A.programa,A.comando2 ");
+                sql.append(" SELECT DISTINCT A.tipo,A.cod_usuario,A.servidor,A.ip,A.database,a.versao,a.tipo_ambiente,A.usuario_bd_app,A.programa,A.comando2 ");
                 sql.append(" FROM vw_ferramentas A ");
                 sql.append("  where A.cod_empresa = (select B.cod_empresa from tb_usuario B where B.usuario = ? ) "); 
                 sql.append("    and A.tipo = (select C.cod_tipo from tb_tipo_config C where C.tipo = ? ) ");
@@ -79,6 +79,7 @@ public class FerramentaDAO {
             u.setServidor(resultado.getString("servidor"));
             u.setIp(resultado.getString("ip"));
             u.setDatabase(resultado.getString("database"));
+            u.setVersao(resultado.getString("versao"));
             u.setTipo_ambiente(resultado.getString("tipo_ambiente"));
             u.setUsuario_bd_app(resultado.getString("usuario_bd_app"));
             u.setPrograma(resultado.getString("programa"));

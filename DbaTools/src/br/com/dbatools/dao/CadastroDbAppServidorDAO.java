@@ -34,7 +34,7 @@ public class CadastroDbAppServidorDAO {
      
         
 	   comando.executeUpdate();
-
+	   ConexaoFactory.fecharConexao();
 	}
 	
 	public ArrayList<CadastroDbAppServidor> listar(String user, String computador) throws SQLException {
@@ -48,7 +48,7 @@ public class CadastroDbAppServidorDAO {
 		sql.append("  FROM TB_CADASTRO_DB_APP A, TB_PLANILHA B ");
 		sql.append(" WHERE A.NOM_CADASTRO = B.SERVIDOR ");
 		sql.append("and b.cod_empresa = (select cod_empresa from tb_usuario where usuario = ?) ");
-
+		sql.append(" order by a.nom_cadastro,a.usuario_bd_app ");
 		Connection conexao = ConexaoFactory.conectar();
 
 		PreparedStatement comando = conexao.prepareStatement(sql.toString());
@@ -93,6 +93,7 @@ public class CadastroDbAppServidorDAO {
 		comando.setLong(1, p.getCod_cadastro());
 	
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 
@@ -115,6 +116,7 @@ public class CadastroDbAppServidorDAO {
     comando.setLong(6, p.getCod_cadastro());
 	
 	comando.executeUpdate();
+	ConexaoFactory.fecharConexao();
 
 }
 	

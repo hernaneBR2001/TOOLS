@@ -12,6 +12,7 @@ import br.com.dbatools.dao.InstalacaoConfigDAO;
 import br.com.dbatools.dao.TipoConfigDAO;
 import br.com.dbatools.dao.CredencialUsuarioDAO;
 import br.com.dbatools.domain.Usuario;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.domain.InstalacaoConfig;
 import br.com.dbatools.domain.TipoConfig;
 import br.com.dbatools.domain.CredencialUsuario;
@@ -105,6 +106,7 @@ public class CredencialUsuarioBean {
 
 		CredencialUsuarioDAO dao = new CredencialUsuarioDAO();
 		itens = dao.listar(user,computador);
+		ConexaoFactory.fecharConexao();
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());

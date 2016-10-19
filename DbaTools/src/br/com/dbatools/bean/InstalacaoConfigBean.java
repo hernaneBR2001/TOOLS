@@ -9,6 +9,7 @@ import javax.faces.bean.ViewScoped;
 import br.com.dbatools.dao.InstalacaoConfigDAO;
 import br.com.dbatools.domain.Empresa;
 import br.com.dbatools.domain.Perfil;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.domain.InstalacaoConfig;
 import br.com.dbatools.util.JSFUtil;
 
@@ -84,6 +85,7 @@ public class InstalacaoConfigBean {
 		try {
 		InstalacaoConfigDAO dao = new InstalacaoConfigDAO();
 		itens = dao.listar();
+		ConexaoFactory.fecharConexao();
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());

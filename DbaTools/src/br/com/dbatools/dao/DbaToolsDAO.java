@@ -34,7 +34,8 @@ public class DbaToolsDAO {
      
         
 	   comando.executeUpdate();
-
+	   ConexaoFactory.fecharConexao();
+	   
 	}
 	
 	public ArrayList<DbaTools> listar(String user, String computador) throws SQLException {
@@ -93,7 +94,8 @@ public class DbaToolsDAO {
 		comando.setLong(1, p.getCod_dbatools());
 	
 		comando.executeUpdate();
-
+		ConexaoFactory.fecharConexao();
+		
 	}
 
     public void editar(DbaTools p) throws SQLException {
@@ -113,6 +115,7 @@ public class DbaToolsDAO {
     comando.setLong(3, p.getCod_dbatools());
 	
 	comando.executeUpdate();
+	ConexaoFactory.fecharConexao();
 
 }
 	

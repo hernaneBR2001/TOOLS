@@ -9,6 +9,7 @@ import javax.faces.bean.ViewScoped;
 
 import br.com.dbatools.dao.EmpresaDAO;
 import br.com.dbatools.domain.Empresa;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.util.JSFUtil;
 
 @ManagedBean(name = "MBEmpresa")
@@ -52,6 +53,7 @@ public void setItensFiltrados(ArrayList<Empresa> itensFiltrados) {
 
 			EmpresaDAO dao = new EmpresaDAO();
 			itens = dao.listar();
+			ConexaoFactory.fecharConexao();
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();

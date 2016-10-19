@@ -26,6 +26,7 @@ public class ConexaoPostgres {
 		
 		try {
 			conexao.close();
+			
 		} catch (SQLException e) {
 			System.out.println("Falha ao fechar a Conexão");
 		}

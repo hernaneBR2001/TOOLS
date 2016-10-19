@@ -10,6 +10,7 @@ import br.com.dbatools.dao.TipoConfigDAO;
 import br.com.dbatools.domain.Empresa;
 import br.com.dbatools.domain.Perfil;
 import br.com.dbatools.domain.TipoConfig;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.util.JSFUtil;
 
 @ManagedBean(name="MBTipoConfig")
@@ -84,6 +85,7 @@ public class TipoConfigBean {
 		try {
 		TipoConfigDAO dao = new TipoConfigDAO();
 		itens = dao.listar();
+		ConexaoFactory.fecharConexao();
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());

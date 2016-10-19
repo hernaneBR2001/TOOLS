@@ -34,6 +34,7 @@ public class UsuarioDAO {
 		
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 	
@@ -49,7 +50,7 @@ public class UsuarioDAO {
                 sql.append(" U.COD_PERFIL = P.COD_PERFIL and ");
                 sql.append(" U.COD_EMPRESA = (select cod_empresa from tb_usuario where usuario = ?) AND ");
                 sql.append(" U.COD_PERFIL = (select cod_perfil from tb_usuario where usuario = ?)  ");
-
+                sql.append(" order by 2,3 ");
                 
 		Connection conexao = ConexaoFactory.conectar();
 
@@ -129,6 +130,7 @@ public class UsuarioDAO {
 	comando.setLong(10, p.getCod_usuario());
 	
 	comando.executeUpdate();
+	ConexaoFactory.fecharConexao();
 
 }
 	

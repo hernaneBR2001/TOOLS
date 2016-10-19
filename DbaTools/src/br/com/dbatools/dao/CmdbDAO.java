@@ -42,6 +42,7 @@ public class CmdbDAO {
         comando.setLong(12,p.getContato3().getCod_usuario());
         
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 	
@@ -77,7 +78,7 @@ public class CmdbDAO {
 		sql.append(" where ");
 		sql.append(" a.cod_empresa = e.cod_empresa and ");
 		sql.append(" a.cod_empresa =  (select cod_empresa from tb_usuario where usuario = ? ) ");
-
+		sql.append(" order by 4,7,8 ");
 		
 		Connection conexao = ConexaoFactory.conectar();
 
@@ -152,6 +153,7 @@ public class CmdbDAO {
 		
 
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 
@@ -182,7 +184,7 @@ public class CmdbDAO {
     comando.setLong(12, p.getCod_planilha());
 	
 	comando.executeUpdate();
-
+	ConexaoFactory.fecharConexao();
 }
 	
 

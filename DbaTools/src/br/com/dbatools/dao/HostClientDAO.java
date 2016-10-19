@@ -34,7 +34,7 @@ public class HostClientDAO {
 			hc.setHost(rs.getString("host"));
 			hc.setUsername(rs.getString("username"));
 			hc.setPort(rs.getInt("port"));
-			hc.setDtLastConnect(rs.getDate("dtlasconnect"));
+			hc.setDtLastConnect(rs.getDate("dtlastconnect"));
 			return hc;
 		}
 		else{

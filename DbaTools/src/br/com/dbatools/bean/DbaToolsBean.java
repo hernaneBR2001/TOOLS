@@ -11,6 +11,7 @@ import br.com.dbatools.dao.EmpresaDAO;
 import br.com.dbatools.dao.CmdbDAO;
 import br.com.dbatools.dao.DbaToolsDAO;
 import br.com.dbatools.domain.Empresa;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.domain.Cmdb;
 import br.com.dbatools.domain.DbaTools;
 import br.com.dbatools.util.JSFUtil;
@@ -79,7 +80,7 @@ public class DbaToolsBean {
 			
 		DbaToolsDAO dao = new DbaToolsDAO();
 		itens = dao.listar(user,computador);
-		
+		ConexaoFactory.fecharConexao();
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());

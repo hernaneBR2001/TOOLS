@@ -12,6 +12,7 @@ import br.com.dbatools.dao.UsuarioDAO;
 import br.com.dbatools.dao.CmdbDAO;
 import br.com.dbatools.domain.Empresa;
 import br.com.dbatools.domain.Usuario;
+import br.com.dbatools.factory.ConexaoFactory;
 import br.com.dbatools.domain.Cmdb;
 import br.com.dbatools.util.JSFUtil;
 
@@ -79,6 +80,7 @@ public class CmdbBean {
 
 		CmdbDAO dao = new CmdbDAO();
 		itens = dao.listar(user,computador);
+		ConexaoFactory.fecharConexao();
 		
 		} catch(SQLException ex) {
 		   ex.printStackTrace();

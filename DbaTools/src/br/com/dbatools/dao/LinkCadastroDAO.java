@@ -56,7 +56,7 @@ public class LinkCadastroDAO {
         sql.append("where ");
         sql.append("   a.cod_usuario = (select cod_usuario from tb_usuario where usuario = ? ) and ");
         sql.append("   a.cod_tipo =  (select cod_tipo from tb_tipo_config where tipo = ? )  ");
-		             
+        sql.append(" order by 3,4,5 ");             
 		Connection conexao = ConexaoFactory.conectar();
 
 		PreparedStatement comando = conexao.prepareStatement(sql.toString());

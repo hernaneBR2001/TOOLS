@@ -13,9 +13,9 @@
 
 <h:form>            
 
- 
-    <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
- 
+ 	<p:growl id="msgGlobal" life="10000" />
+    <p:growl id="growl" showDetail="true" life="10000" />
+ 	<p:graphicImage url="/resources/images/cst_logo_cliente.jpg"></p:graphicImage>
     <p:dialog header="Login" widgetVar="dlg" resizable="false" visible="true"  >
         <h:panelGrid columns="2" cellpadding="5">
             <h:outputLabel for="username" value="Usuário:" />
@@ -26,16 +26,14 @@
  
     <p:outputLabel for="console" value="Selecione uma opção" />
         <p:selectOneMenu id="console" value="#{userLoginView.computador}" required="true" style="width:190px">
-            <f:selectItem itemLabel=" " itemValue="" />
+             <f:selectItem itemLabel="TERMINAL" itemValue="TERMINAL" />
             <f:selectItem itemLabel="EMPRESA" itemValue="EMPRESA" />
             <f:selectItem itemLabel="PESSOAL" itemValue="PESSOAL" />
-            <f:selectItem itemLabel="TERMINAL" itemValue="TERMINAL" />
         </p:selectOneMenu>
 
  
             <f:facet name="footer">
-                <p:commandButton value="Login" update="growl" actionListener="#{userLoginView.login}"
-                                 oncomplete="handleLoginRequest(xhr, status, args)" />
+                <p:commandButton value="Login" update="growl" actionListener="#{userLoginView.login}" />
             </f:facet>  
         </h:panelGrid>
     </p:dialog>

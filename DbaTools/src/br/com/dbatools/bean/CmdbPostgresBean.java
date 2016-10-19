@@ -12,6 +12,8 @@ import br.com.dbatools.dao.UsuarioDAO;
 import br.com.dbatools.dao.CmdbPostgresDAO;
 import br.com.dbatools.domain.Empresa;
 import br.com.dbatools.domain.Usuario;
+import br.com.dbatools.factory.ConexaoFactory;
+import br.com.dbatools.factory.ConexaoPostgres;
 import br.com.dbatools.domain.CmdbPostgres;
 import br.com.dbatools.util.JSFUtil;
 
@@ -75,6 +77,7 @@ public class CmdbPostgresBean {
 		try {
 		CmdbPostgresDAO dao = new CmdbPostgresDAO();
 		itens = dao.listar();
+		ConexaoPostgres.fecharConexao();
 		} catch(SQLException ex) {
 		   ex.printStackTrace();
 		   JSFUtil.adicionarMensagemErro(ex.getMessage());

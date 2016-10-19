@@ -35,6 +35,7 @@ public class CadastroDbAppDAO {
      
         
 	   comando.executeUpdate();
+	   ConexaoFactory.fecharConexao();
 
 	}
 	
@@ -49,7 +50,7 @@ public class CadastroDbAppDAO {
 		sql.append("  FROM TB_CADASTRO_DB_APP A, TB_PLANILHA B ");
 		sql.append(" WHERE A.NOM_CADASTRO = B.DATABASE ");
 		sql.append("and b.cod_empresa = (select cod_empresa from tb_usuario where usuario = ?) ");
-
+		sql.append(" order by a.nom_cadastro,a.usuario_bd_app ");
 
 		Connection conexao = ConexaoFactory.conectar();
 
@@ -92,6 +93,7 @@ public class CadastroDbAppDAO {
 		comando.setLong(1, p.getCod_cadastro());
 	
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 
@@ -115,6 +117,7 @@ public class CadastroDbAppDAO {
     comando.setLong(6, p.getCod_cadastro());
 	
 	comando.executeUpdate();
+	ConexaoFactory.fecharConexao();
 
 }
 	

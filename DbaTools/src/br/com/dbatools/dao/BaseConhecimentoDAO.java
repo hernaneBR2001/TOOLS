@@ -38,6 +38,7 @@ public class BaseConhecimentoDAO {
      
         
 	   comando.executeUpdate();
+	   ConexaoFactory.fecharConexao();
 
 	}
 	
@@ -61,7 +62,7 @@ public class BaseConhecimentoDAO {
 		sql.append(" a.cod_empresa = (select cod_empresa from tb_usuario where usuario = ? ) ");
 		sql.append("and cod_usuario = (select cod_usuario from tb_usuario where usuario = ? )");
 		sql.append("and cod_tipo = (select cod_tipo from tb_tipo_config where tipo = ? ) ");
-
+		sql.append(" order by a.servidor,a.database,a.titulo_doc");
 		Connection conexao = ConexaoFactory.conectar();
 
 		PreparedStatement comando = conexao.prepareStatement(sql.toString());
@@ -102,10 +103,10 @@ public class BaseConhecimentoDAO {
             u.setEmpresa(e);
             
             itens.add(u);
-
+            
 		}
 		return itens;
-
+		
 	}
 
 	
@@ -124,6 +125,7 @@ public class BaseConhecimentoDAO {
 		comando.setLong(1, p.getCod_conhecimento());
 	
 		comando.executeUpdate();
+		ConexaoFactory.fecharConexao();
 
 	}
 
@@ -148,6 +150,7 @@ public class BaseConhecimentoDAO {
     comando.setLong(6, p.getCod_conhecimento());
 	
 	comando.executeUpdate();
+	ConexaoFactory.fecharConexao();
 
 }
 	

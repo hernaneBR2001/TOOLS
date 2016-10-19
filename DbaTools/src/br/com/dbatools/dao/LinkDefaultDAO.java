@@ -35,7 +35,7 @@ public class LinkDefaultDAO {
 
                 sql.append(" SELECT cod_link_default,descricao_link_default,link_default ");
                 sql.append(" FROM tb_link_default ");
-
+                sql.append(" order by 2,3 ");
 		Connection conexao = ConexaoFactory.conectar();
 
 		PreparedStatement comando = conexao.prepareStatement(sql.toString());

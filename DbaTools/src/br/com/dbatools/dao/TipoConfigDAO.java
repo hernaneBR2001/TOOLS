@@ -34,7 +34,7 @@ public class TipoConfigDAO {
 
                 sql.append(" SELECT cod_tipo,tipo ");
                 sql.append(" FROM tb_tipo_config ");
-
+                sql.append(" order by 2 ");
 		Connection conexao = ConexaoFactory.conectar();
 
 		PreparedStatement comando = conexao.prepareStatement(sql.toString());
